@@ -1,0 +1,79 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Introduction",
+    "section": "",
+    "text": "The purpose of this course is to teach you the basics of the R language and give you the confidence to tackle larger projects using the language. Importantly, we want to get you thinking like a programmer. This doesn’t mean that by the end of the course you will know R fully, but you will know enough so you can go online and look for the help you need to complete most tasks.\n\n\nProgramming is like any skill, the more you practice the better you get. It’s really important that you keep using what you have learned after the course is completed otherwise there is a good chance you will forget everything and you’ll be back to square one.\n\n\n\nR is a high-level programming language with a focus on mathematics and statistics, but R can be used for a wide variety of applications given the flexibility of the language. R is also free, and available for all operating systems. Given the richness of the language and no cost to use it, bioinformaticians have used R for more than 20 years as the platform for which which to develop packages to solve bioinformatics problems.\nThe BioConductor Project is a repository for bioinformatics tools which continues to grow, and hosts packages such as DESeq2 which you may have heard of. Some other popular packages such as Seurat aren’t actually hosted by Bioconductor, but in the main R package repository. We’ll cover package installation later later.\n\n\n\nThe Python language has been rocketing in popularity for the past few years, particularly among data scientists who make use of the AI/ML tools such as Tensorflow and PyTorch. Scanpy is a very popular package for single-cell analysis. For very computationally intensive tasks (e.g sequence alignment), languages such as C/C++/Rust are more commonly used, but these are far more difficult to learn.\n\n\n\nWe’re going to take a different approach to this course. You will be taught the basics of the R language while doing small exercises along the way. However, we will finish by you undertaking a project which will push you quite hard. The aim is that by tacking a more difficult problem will consolidate what you have learnt, and learn more by having to look up solutions to the problems you will likely face.\n\n\n\nPoint your browser to http://cran.r-project.org/ to download and install the latest version of R. For these tutorials we are also going to use RStudio which is an advanced development environment for R which includes a window for an editor, console, and plotting window. You will see what this means later."
+  },
+  {
+    "objectID": "index.html#practice-makes-perfect",
+    "href": "index.html#practice-makes-perfect",
+    "title": "Introduction",
+    "section": "",
+    "text": "Programming is like any skill, the more you practice the better you get. It’s really important that you keep using what you have learned after the course is completed otherwise there is a good chance you will forget everything and you’ll be back to square one."
+  },
+  {
+    "objectID": "index.html#why-use-r",
+    "href": "index.html#why-use-r",
+    "title": "Introduction",
+    "section": "",
+    "text": "R is a high-level programming language with a focus on mathematics and statistics, but R can be used for a wide variety of applications given the flexibility of the language. R is also free, and available for all operating systems. Given the richness of the language and no cost to use it, bioinformaticians have used R for more than 20 years as the platform for which which to develop packages to solve bioinformatics problems.\nThe BioConductor Project is a repository for bioinformatics tools which continues to grow, and hosts packages such as DESeq2 which you may have heard of. Some other popular packages such as Seurat aren’t actually hosted by Bioconductor, but in the main R package repository. We’ll cover package installation later later."
+  },
+  {
+    "objectID": "index.html#which-other-languages-do-bioinformaticians-use",
+    "href": "index.html#which-other-languages-do-bioinformaticians-use",
+    "title": "Introduction",
+    "section": "",
+    "text": "The Python language has been rocketing in popularity for the past few years, particularly among data scientists who make use of the AI/ML tools such as Tensorflow and PyTorch. Scanpy is a very popular package for single-cell analysis. For very computationally intensive tasks (e.g sequence alignment), languages such as C/C++/Rust are more commonly used, but these are far more difficult to learn."
+  },
+  {
+    "objectID": "index.html#how-will-this-course-work",
+    "href": "index.html#how-will-this-course-work",
+    "title": "Introduction",
+    "section": "",
+    "text": "We’re going to take a different approach to this course. You will be taught the basics of the R language while doing small exercises along the way. However, we will finish by you undertaking a project which will push you quite hard. The aim is that by tacking a more difficult problem will consolidate what you have learnt, and learn more by having to look up solutions to the problems you will likely face."
+  },
+  {
+    "objectID": "index.html#getting-r-and-rstudio",
+    "href": "index.html#getting-r-and-rstudio",
+    "title": "Introduction",
+    "section": "",
+    "text": "Point your browser to http://cran.r-project.org/ to download and install the latest version of R. For these tutorials we are also going to use RStudio which is an advanced development environment for R which includes a window for an editor, console, and plotting window. You will see what this means later."
+  },
+  {
+    "objectID": "index.html#assigning-a-variable.",
+    "href": "index.html#assigning-a-variable.",
+    "title": "Introduction",
+    "section": "Assigning a variable.",
+    "text": "Assigning a variable.\nInto your script copy/type the following line:\n\nx = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n\nThis will make a vector of values from 1 to 10, and put them into a variable called x.\nExecute the code by hitting the “Run” button at the top-right of the script window. You will see this line appear in the R console below.\nTo view the contents of the object you have just created, just type x in the console and hit return:\n\nx\n\n[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n\n\nThe contents of x are now printed out.\nNow is a good time to learn about commenting and documenting code. This is free text you put into your scripts that tell the reader whats going on. It also helps remind your future self of what you did or your thought process. Comments are put in using #, so for example:\n\nx = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] # This is a comment\n\nAnything after a # will be ignored by Python. You can run the code again to check.\nRather than typing in the value 1 to 10, there is a much simpler way to create the same vector using :\n\nx = list(range(1,11))\nprint(x)\n\n[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n\n\nMuch better! It’s also bidirectional, so to go backwards it’s:\n\ny = list(range(5, -6, -1))\ny\n\n[5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]\n\n\nIssue the command help(range). In python you can get a manual for any function using the help() command. Look at the help page and generate a vector of numbers from 1 to 100 in steps of 10:\n\na = list(range(0, 101,10))\na\n\n[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]\n\n\nLets try something a bit more difficult. Generate a vector called b ranging from 3 to 987 where the length of the vector is 53 entries long. Done? Check the length of the vector you have just made.\nIn Python, there is a greater reliance on packages for working with numbers, and the package which we will use the most is numpy. To load a package we do:\n\nimport numpy\n\nThe way we use functions from a package is by doing numpy.X where .X is replaced by the name of the function in the numpy package you need. You can already see that if you need to use numpy functions a lot, then having to type numpy all the time is going to be a drag. So what we can do here is shorted it by doing:\n\nimport numpy as np\n\nSo now, if you want to use a numpy function we just use np.X\n\nb = np.arange(3, 938, 53)  # 938 is exclusive, so it matches R's inclusive 937\nlength = len(b)\nprint(length)\n\n18\n\n\nWe can also make a new vector d using a vector c:\n\nc = np.arange(1, 51)  # 1 to 50 inclusive\nd = 1 / c\nprint(d)\n\n[1.         0.5        0.33333333 0.25       0.2        0.16666667\n 0.14285714 0.125      0.11111111 0.1        0.09090909 0.08333333\n 0.07692308 0.07142857 0.06666667 0.0625     0.05882353 0.05555556\n 0.05263158 0.05       0.04761905 0.04545455 0.04347826 0.04166667\n 0.04       0.03846154 0.03703704 0.03571429 0.03448276 0.03333333\n 0.03225806 0.03125    0.03030303 0.02941176 0.02857143 0.02777778\n 0.02702703 0.02631579 0.02564103 0.025      0.02439024 0.02380952\n 0.02325581 0.02272727 0.02222222 0.02173913 0.0212766  0.02083333\n 0.02040816 0.02      ]\n\n\nAnd do maths on them, for example calculate the mean of d:\n\nmean_d = np.mean(d)\nprint(mean_d)\n\n0.08998410676658848\n\n\n\nstd_d = np.std(d)\nprint(std_d)\n\n0.15622264625159116"
+  },
+  {
+    "objectID": "index.html#conditionals",
+    "href": "index.html#conditionals",
+    "title": "Introduction",
+    "section": "Conditionals",
+    "text": "Conditionals\nThis is important stuff. If we want to ask whether something is equal to something else, we need to use the == operator, NOT =. Try this:\n\nx = np.arange(1,11)\nx == 5\n\narray([False, False, False, False,  True, False, False, False, False,\n       False])\n\n\nWe can also do some other simple but important things:\n\nprint(np.where(x &lt; 5))\nprint(np.where(x &lt;= 5))\nprint(np.where(x &gt;= 5))\nprint(np.where(x &gt; 5))\nprint(np.where(x != 5))\n\n(array([0, 1, 2, 3]),)\n(array([0, 1, 2, 3, 4]),)\n(array([4, 5, 6, 7, 8, 9]),)\n(array([5, 6, 7, 8, 9]),)\n(array([0, 1, 2, 3, 5, 6, 7, 8, 9]),)\n\n\nLets make another vector y:\n\ny = np.arange(7,16)\ncommon = np.intersect1d(x, y)\nprint(common)\n\n[ 7  8  9 10]\n\n\nWhat do you think this does?\n\nresult = x[~np.isin(x, y)]\nprint(result)\n\n[1 2 3 4 5 6]"
+  },
+  {
+    "objectID": "index.html#basic-plotting",
+    "href": "index.html#basic-plotting",
+    "title": "Introduction",
+    "section": "Basic plotting",
+    "text": "Basic plotting\nIn order to plot, we need another module called matplotlib, specifically, a submodule called pyplot which can be thought of as base plotting in R (if you use R). Lets load it:\n\nimport matplotlib.pyplot as plt\n\nTo plot we do:\n\nplt.plot(d)\n\n\n\n\n\n\n\n\nDo some googling and see how you can add a title, label the x/y axis, make the line points instead, and colour them red.\nHere is how I would do it:\n\nplt.plot(c,d, marker='o',color=\"red\")\nplt.title(\"c\")\nplt.xlabel(\"Index\")\nplt.ylabel(\"d\")\nplt.show()\n\n\n\n\n\n\n\n\nWe can make this plot a little fancier. Those who work in R will be familiar with ggplot2 package, and there is a direct port to that in Python called plotnine. We use this in combaination with pandas which is the module that creates and handles data.frames (more on this later):\n\nfrom plotnine import ggplot, aes, geom_line, geom_point\nimport pandas as pd\n\ndf = pd.DataFrame({'col1': c, 'col2': d})\n\n# Plot\np = (\n    ggplot(df, aes(x='col1', y='col2')) +\n    geom_line(color='red') +\n    geom_point(color='green')\n)\np.draw()\n\n\n\n\n\n\n\n\nIf you want to do it the “pure” Pythin way (and we proabably should!) we can to the following using seaborn plus matplotlib:\n\nimport seaborn as sns\n\ndf = pd.DataFrame({'col1': c, 'col2': d})\n\n# Plot\nplt.figure(figsize=(8, 5))\nsns.lineplot(data=df, x='col1', y='col2', color='red')   # red line\nsns.scatterplot(data=df, x='col1', y='col2', color='green')  # green points\n\nplt.title(\"1/c vs c\")\nplt.xlabel(\"col1\")\nplt.ylabel(\"col2\")\nplt.show()"
+  },
+  {
+    "objectID": "index.html#subsetting",
+    "href": "index.html#subsetting",
+    "title": "Introduction",
+    "section": "Subsetting",
+    "text": "Subsetting\nLets make a matrix (and a vector) containing integer values so we can take a look at how subsetting work in R:\n\n#m = np.arange(1, 51).reshape((5, 10), order='F').T  # 10x5 after transpose\nv = np.arange(1, 11)\n\nm = np.arange(1, 51).reshape((10, 5))\n\ndf = pd.DataFrame(\n    m,\n    index=[\"A\",\"B\",\"C\",\"D\",\"E\",\"F\",\"G\",\"H\",\"I\",\"J\"],\n    columns=[\"cat\", \"dog\", \"pig\", \"cow\", \"chicken\"]\n)\nprint(df)\n\n   cat  dog  pig  cow  chicken\nA    1    2    3    4        5\nB    6    7    8    9       10\nC   11   12   13   14       15\nD   16   17   18   19       20\nE   21   22   23   24       25\nF   26   27   28   29       30\nG   31   32   33   34       35\nH   36   37   38   39       40\nI   41   42   43   44       45\nJ   46   47   48   49       50\n\n\nWe can access individual elements using square brackets []. So to get the 6th, 1st and 5th elements of v we need:\n\nprint(v[[6,0,4]])\n\n[7 1 5]\n\n\nWhy? Because Python counts from 0. If you have been using R until now, you will know it is one based. To get the first element of a vector in R you would d v[1], but this isn’t so in Python. In fact, pretty much all languages are 0 based. Wit this in mind, lets look ar the first row of the matrix m.\n\nprint(df.iloc[0,:])\n\ncat        1\ndog        2\npig        3\ncow        4\nchicken    5\nName: A, dtype: int64\n\n\nand the 3rd column:\n\nprint(df.iloc[:,2])\n\nA     3\nB     8\nC    13\nD    18\nE    23\nF    28\nG    33\nH    38\nI    43\nJ    48\nName: pig, dtype: int64\n\n\n\nprint(df.iloc[:,[1,4]]) # the 2nd and 5th column\n\n   dog  chicken\nA    2        5\nB    7       10\nC   12       15\nD   17       20\nE   22       25\nF   27       30\nG   32       35\nH   37       40\nI   42       45\nJ   47       50\n\n\n\nprint(df.iloc[:,[1,4]]) \n\n   dog  chicken\nA    2        5\nB    7       10\nC   12       15\nD   17       20\nE   22       25\nF   27       30\nG   32       35\nH   37       40\nI   42       45\nJ   47       50\n\n\n\nprint(df.iloc[2:7, 3]) # the 3rd to 7th row of the 4th column. Remember 7 is exclusive\n\nC    14\nD    19\nE    24\nF    29\nG    34\nName: cow, dtype: int64\n\n\n\nprint(df.loc[\"B\",:]) # gets the row labelled B\n\ncat         6\ndog         7\npig         8\ncow         9\nchicken    10\nName: B, dtype: int64\n\n\n\nprint(df.loc[\"B\",\"cow\"])\n\n9\n\n\n\nprint(df.loc[[\"F\", \"J\"],[\"chicken\", \"cat\", \"pig\"]])\n\n   chicken  cat  pig\nF       30   26   28\nJ       50   46   48\n\n\nWe often need to collect vectors and assemble them into a matrix. This can be done using the rbind (row) and cbind (column) functions:\n\nv1 = np.arange(1, 11)         # [1, 2, ..., 10]\nv2 = np.arange(101, 111)      # [101, 102, ..., 110]\n\nrbound_mat = np.vstack([v1, v2])\nprint(rbound_mat)\n\n[[  1   2   3   4   5   6   7   8   9  10]\n [101 102 103 104 105 106 107 108 109 110]]"
+  }
+]

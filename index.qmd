@@ -1,0 +1,454 @@
+---
+title: ""
+---
+
+# Introduction
+
+The purpose of this course is to teach you the basics of the R language and give you the confidence to tackle larger projects using the language. *Importantly, we want to get you thinking like a programmer*. This doesn't mean that by the end of the course you will know R fully, but you will know enough so you can go online and look for the help you need to complete most tasks.
+
+## Practice makes perfect
+
+Programming is like any skill, the more you practice the better you get. ***It's really important that you keep using what you have learned after the course is completed*** otherwise there is a good chance you will forget everything and you'll be back to square one.
+
+## Why Use R?
+
+R is a high-level programming language with a focus on mathematics and statistics, but R can be used for a wide variety of applications given the flexibility of the language. R is also free, and available for all operating systems. Given the richness of the language and no cost to use it, bioinformaticians have used R for more than 20 years as the platform for which which to develop packages to solve bioinformatics problems.
+
+The [BioConductor Project](https://www.bioconductor.org/) is a repository for bioinformatics tools which continues to grow, and hosts packages such as DESeq2 which you may have heard of. Some other popular packages such as Seurat aren't actually hosted by Bioconductor, but in the main R package repository. We'll cover package installation later later.
+
+## Which other languages do bioinformaticians use?
+
+The Python language has been rocketing in popularity for the past few years, particularly among data scientists who make use of the AI/ML tools such as Tensorflow and PyTorch. Scanpy is a very popular package for single-cell analysis. For very computationally intensive tasks (e.g sequence alignment), languages such as C/C++/Rust are more commonly used, but these are far more difficult to learn.
+
+## How will this course work?
+
+We're going to take a different approach to this course. You will be taught the basics of the R language while doing small exercises along the way. However, we will finish by you undertaking a project which will push you quite hard. The aim is that by tacking a more difficult problem will consolidate what you have learnt, and learn more by having to look up solutions to the problems you will likely face.
+
+## Getting R and RStudio
+
+Point your browser to <http://cran.r-project.org/> to download and install the latest version of R. For these tutorials we are also going to use [RStudio](http://www.rstudio.com/) which is an advanced development environment for R which includes a window for an editor, console, and plotting window. You will see what this means later.
+
+# Rstudio
+
+Open up RStudio, and it will look something like this:
+
+![](images/Rstudio_new.png)
+
+The different parts are:
+
+1.  The code editor. This is where you write code.
+2.  The R console. This is the R environment where R code is executed.
+3.  Workspace. The objects you create along the way will be listed here.
+4.  Plots and files. Plots will render here, and files can be browsed in the "Files" pane.
+
+Before we start, we need to do a little prep.
+
+1.  On your computer, make a folder called "Rcourse1".
+
+We then set the working directory to this folder, so
+
+2.  In RStudio go to Session \> Set Working Directory \> Choose Directory and find the "Rcourse1" folder and select it.
+
+RStudio will now be looking for files in this folder, and any saved plots will be put here unless stated otherwise.
+
+Now, go to File \> New File \> R Script
+
+A new empty script will open up in the top left window. Go to File \> Save and give it a name. It will be saved to you current working directory. You should see your file being added to the list in the Plot and Files pane.
+
+Now that we've done our prep, let do some R.
+
+# The Basics
+
+We'll now look at some basic operations. The code should be copied into your R script as we go along.
+
+## Assigning a variable.
+
+Into your script copy/type the following line:
+
+```{python}
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+```
+
+This will make a **vector** of values from 1 to 10, and put them into a variable called `x`.
+
+Execute the code by hitting the "Run" button at the top-right of the script window. You will see this line appear in the R console below.
+
+To view the contents of the object you have just created, just type `x` in the **console** and hit return:
+
+```{python}
+x
+```
+
+The contents of x are now printed out.
+
+**Now is a good time to learn about commenting and documenting code**. This is free text you put into your scripts that tell the reader whats going on. It also helps remind your future self of what you did or your thought process. Comments are put in using `#`, so for example:
+
+```{python}
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] # This is a comment
+```
+
+Anything after a `#` will be ignored by Python. You can run the code again to check.
+
+Rather than typing in the value 1 to 10, there is a much simpler way to create the same vector using `:`
+
+```{python}
+x = list(range(1,11))
+print(x)
+```
+
+Much better! It's also bidirectional, so to go backwards it's:
+
+```{python}
+y = list(range(5, -6, -1))
+y
+```
+
+Issue the command `help(range)`. In python you can get a manual for any function using the `help()` command. Look at the help page and generate a vector of numbers from 1 to 100 in steps of 10:
+
+```{python}
+a = list(range(0, 101,10))
+a
+```
+
+Lets try something a bit more difficult. Generate a vector called `b` ranging from 3 to 987 where the length of the vector is 53 entries long. Done? Check the length of the vector you have just made.
+
+In Python, there is a greater reliance on packages for working with numbers, and the package which we will use the most is `numpy`. To load a package we do:
+
+```{python}
+import numpy
+```
+
+The way we use functions from a package is by doing `numpy.X` where `.X` is replaced by the name of the function in the `numpy` package you need. You can already see that if you need to use `numpy` functions a lot, then having to type `numpy` all the time is going to be a drag. So what we can do here is shorted it by doing:
+
+```{python}
+import numpy as np
+```
+
+So now, if you want to use a `numpy` function we just use `np.X`
+
+```{python}
+b = np.arange(3, 938, 53)  # 938 is exclusive, so it matches R's inclusive 937
+length = len(b)
+print(length)
+```
+
+We can also make a new vector `d` using a vector `c`:
+
+```{python}
+c = np.arange(1, 51)  # 1 to 50 inclusive
+d = 1 / c
+print(d)
+```
+
+And do maths on them, for example calculate the mean of `d`:
+
+```{python}
+mean_d = np.mean(d)
+print(mean_d)
+```
+
+```{python}
+std_d = np.std(d)
+print(std_d)
+```
+
+## Conditionals
+
+This is important stuff. If we want to ask whether something is equal to something else, we need to use the `==` operator, NOT `=`. Try this:
+
+```{python}
+x = np.arange(1,11)
+x == 5
+```
+
+We can also do some other simple but important things:
+
+```{python}
+print(np.where(x < 5))
+print(np.where(x <= 5))
+print(np.where(x >= 5))
+print(np.where(x > 5))
+print(np.where(x != 5))
+```
+
+Lets make another vector `y`:
+
+```{python}
+y = np.arange(7,16)
+common = np.intersect1d(x, y)
+print(common)
+```
+
+What do you think this does?
+
+```{python}
+result = x[~np.isin(x, y)]
+print(result)
+```
+
+## Basic plotting
+
+In order to plot, we need another module called `matplotlib`, specifically, a submodule called `pyplot` which can be thought of as base plotting in R (if you use R). Lets load it:
+
+```{python}
+import matplotlib.pyplot as plt
+```
+
+To plot we do:
+
+```{python}
+plt.plot(d)
+```
+
+Do some googling and see how you can add a title, label the x/y axis, make the line points instead, and colour them red.
+
+Here is how I would do it:
+
+```{python}
+plt.plot(c,d, marker='o',color="red")
+plt.title("c")
+plt.xlabel("Index")
+plt.ylabel("d")
+plt.show()
+```
+
+We can make this plot a little fancier. Those who work in R will be familiar with `ggplot2` package, and there is a direct port to that in Python called `plotnine`. We use this in combaination with `pandas` which is the module that creates and handles data.frames (more on this later):
+
+```{python}
+from plotnine import ggplot, aes, geom_line, geom_point
+import pandas as pd
+
+df = pd.DataFrame({'col1': c, 'col2': d})
+
+# Plot
+p = (
+    ggplot(df, aes(x='col1', y='col2')) +
+    geom_line(color='red') +
+    geom_point(color='green')
+)
+p.draw()
+```
+
+If you want to do it the "pure" Pythin way (and we proabably should!) we can to the following using `seaborn` plus `matplotlib`:
+
+```{python}
+
+import seaborn as sns
+
+df = pd.DataFrame({'col1': c, 'col2': d})
+
+# Plot
+plt.figure(figsize=(8, 5))
+sns.lineplot(data=df, x='col1', y='col2', color='red')   # red line
+sns.scatterplot(data=df, x='col1', y='col2', color='green')  # green points
+
+plt.title("1/c vs c")
+plt.xlabel("col1")
+plt.ylabel("col2")
+plt.show()
+```
+
+# Matricies
+
+Matrices are the most common data format bioinformaticians work with. Microarray/RNAseq/single-cell data are all kept in matricies where gene are in the rows and samples down in the columns. Lets make a simple matrix of zeros using `numpy`:
+
+```{python}
+m = np.zeros((10, 5))  # 10 rows, 5 columns
+print(m)
+```
+
+This will create a matrix filled with zeros. To transpose (flip) the matrix we use t() (this will be important later!)
+
+```{python}
+tposed_m = m.T
+print(tposed_m)
+```
+
+We usually need to name the rows and columns (genes/samples), so for that we need to switch to using a pandas dataframe because np matricies do not take labels:
+
+```{python}
+df = pd.DataFrame(
+    m,
+    index=["A","B","C","D","E","F","G","H","I","J"],
+    columns=["cat", "dog", "pig", "cow", "chicken"]
+)
+print(df)
+```
+
+## Subsetting
+
+Lets make a matrix (and a vector) containing integer values so we can take a look at how subsetting work in R:
+
+
+```{python}
+#m = np.arange(1, 51).reshape((5, 10), order='F').T  # 10x5 after transpose
+v = np.arange(1, 11)
+
+m = np.arange(1, 51).reshape((10, 5))
+
+df = pd.DataFrame(
+    m,
+    index=["A","B","C","D","E","F","G","H","I","J"],
+    columns=["cat", "dog", "pig", "cow", "chicken"]
+)
+print(df)
+```
+
+We can access individual elements using square brackets `[]`. So to get the 6th, 1st and 5th elements of `v` we need:
+
+```{python}
+print(v[[6,0,4]])
+```
+
+Why? Because **Python counts from 0.** If you have been using R until now, you will know it is one based. To get the first element of a vector in R you would d `v[1]`, but this isn't so in Python. In fact, pretty much all languages are 0 based. Wit this in mind, lets look ar the first row of the matrix `m`.
+
+```{python}
+print(df.iloc[0,:])
+```
+
+and the 3rd column:
+
+```{python}
+print(df.iloc[:,2])
+```
+
+
+```{python}
+print(df.iloc[:,[1,4]]) # the 2nd and 5th column
+```
+
+```{python}
+print(df.iloc[:,[1,4]]) 
+```
+
+
+```{python}
+print(df.iloc[2:7, 3]) # the 3rd to 7th row of the 4th column. Remember 7 is exclusive
+```
+
+
+```{python}
+print(df.loc["B",:]) # gets the row labelled B
+```
+
+
+```{python}
+print(df.loc["B","cow"])
+```
+
+
+```{python}
+print(df.loc[["F", "J"],["chicken", "cat", "pig"]])
+```
+
+We often need to collect vectors and assemble them into a matrix. This can be done using the rbind (row) and cbind (column) functions:
+
+```{python}
+v1 = np.arange(1, 11)         # [1, 2, ..., 10]
+v2 = np.arange(101, 111)      # [101, 102, ..., 110]
+
+rbound_mat = np.vstack([v1, v2])
+print(rbound_mat)
+```
+
+
+# Dictionaries
+So far we have talked about vectors and matrices separately, but we often we want to collect these things and put them into one object under a single variable as a collection (for example expression data and gene annotation). To do this we use something called a **dictionary**. 
+
+
+```{python}
+alpha = ["A", "B", "C", "D", "E", "F", "G", "H"]
+mat = np.random.randn(8, 5)  # 8 rows, 5 columns of random normal values
+
+listex1 = {
+    "char": alpha,
+    "nums": mat
+}
+```
+
+You can see that each item is given a name `char` `nums` before it is put into the list. Each element can now be accessed via `[]`:
+
+```{python}
+listex1["char"]
+```
+
+So to access the 3rd element of the vector:
+
+```{python}
+listex1["char"][2]
+```
+
+And the first row of the dataframe:
+
+```{python}
+listex1["nums"][0,:]
+```
+
+```{python}
+from sklearn.datasets import load_iris
+iris_data = load_iris(as_frame=True)
+iris = iris_data.frame  # pandas DataFrame
+
+# Sample 10 random rows
+iris.head(5)
+#type(iris)
+```
+
+```{python}
+plt.scatter(iris["sepal length (cm)"], iris["sepal width (cm)"])
+plt.xlabel("Sepal Length")
+plt.ylabel("Sepal Width")
+plt.title("Sepal Length vs Sepal Width")
+plt.show()
+```
+
+
+```{python}
+iris["species"] = iris_data.target_names[iris_data.target]
+
+# Create the plot
+
+sns.scatterplot(data=iris, x="sepal length (cm)", y="sepal width (cm)", hue="species")
+
+# Display the plot
+plt.title("Sepal Length vs Sepal Width")
+plt.show()
+```
+
+
+```{python}
+print(iris_data.target_names)
+```
+
+```{python}
+iris_data.target_names[iris_data.target]
+```
+
+
+```{python}
+
+iris_sp = {species: data for species, data in iris.groupby("species")}
+
+# Show the keys (species names) of the dictionary
+list(iris_sp.keys())
+```
+
+
+```{python}
+iris_sp['setosa'].iloc[0:3, :3]
+
+```
+
+```{python}
+iris_sp['versicolor'].iloc[0:3, :3]
+```
+
+
+
+
+
+
+
+
+
+
