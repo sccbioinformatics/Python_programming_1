@@ -166,6 +166,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#subsetting" id="toc-subsetting" class="nav-link" data-scroll-target="#subsetting">Subsetting</a></li>
   </ul></li>
   <li><a href="#dictionaries" id="toc-dictionaries" class="nav-link" data-scroll-target="#dictionaries">Dictionaries</a></li>
+  <li><a href="#reading-and-writing-files" id="toc-reading-and-writing-files" class="nav-link" data-scroll-target="#reading-and-writing-files">Reading and writing files</a></li>
   </ul>
 </nav>
 </nav>
@@ -234,26 +235,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="assigning-a-variable." class="level2">
 <h2 class="anchored" data-anchor-id="assigning-a-variable.">Assigning a variable.</h2>
 <p>Into your script copy/type the following line:</p>
-<div id="4dc42ae6" class="cell" data-execution_count="1">
+<div id="f53eec90" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This will make a <strong>vector</strong> of values from 1 to 10, and put them into a variable called <code>x</code>.</p>
 <p>Execute the code by hitting the “Run” button at the top-right of the script window. You will see this line appear in the R console below.</p>
 <p>To view the contents of the object you have just created, just type <code>x</code> in the <strong>console</strong> and hit return:</p>
-<div id="8730ad82" class="cell" data-execution_count="2">
+<div id="fc92768b" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="94">
+<div class="cell-output cell-output-display" data-execution_count="50">
 <pre><code>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</code></pre>
 </div>
 </div>
 <p>The contents of x are now printed out.</p>
 <p><strong>Now is a good time to learn about commenting and documenting code</strong>. This is free text you put into your scripts that tell the reader whats going on. It also helps remind your future self of what you did or your thought process. Comments are put in using <code>#</code>, so for example:</p>
-<div id="f2351bf4" class="cell" data-execution_count="3">
+<div id="5f8d114a" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>] <span class="co"># This is a comment</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Anything after a <code>#</code> will be ignored by Python. You can run the code again to check.</p>
 <p>Rather than typing in the value 1 to 10, there is a much simpler way to create the same vector using <code>:</code></p>
-<div id="0d113d92" class="cell" data-execution_count="4">
+<div id="578fc62b" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">11</span>))</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -261,32 +262,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Much better! It’s also bidirectional, so to go backwards it’s:</p>
-<div id="e4eafe6d" class="cell" data-execution_count="5">
+<div id="a1cb248d" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">5</span>, <span class="op">-</span><span class="dv">6</span>, <span class="op">-</span><span class="dv">1</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="97">
+<div class="cell-output cell-output-display" data-execution_count="53">
 <pre><code>[5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]</code></pre>
 </div>
 </div>
 <p>Issue the command <code>help(range)</code>. In python you can get a manual for any function using the <code>help()</code> command. Look at the help page and generate a vector of numbers from 1 to 100 in steps of 10:</p>
-<div id="3f17c866" class="cell" data-execution_count="6">
+<div id="3e8935e2" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">101</span>,<span class="dv">10</span>))</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="98">
+<div class="cell-output cell-output-display" data-execution_count="54">
 <pre><code>[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]</code></pre>
 </div>
 </div>
 <p>Lets try something a bit more difficult. Generate a vector called <code>b</code> ranging from 3 to 987 where the length of the vector is 53 entries long. Done? Check the length of the vector you have just made.</p>
 <p>In Python, there is a greater reliance on packages for working with numbers, and the package which we will use the most is <code>numpy</code>. To load a package we do:</p>
-<div id="afc05f4e" class="cell" data-execution_count="7">
+<div id="039b5dd2" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The way we use functions from a package is by doing <code>numpy.X</code> where <code>.X</code> is replaced by the name of the function in the <code>numpy</code> package you need. You can already see that if you need to use <code>numpy</code> functions a lot, then having to type <code>numpy</code> all the time is going to be a drag. So what we can do here is shorted it by doing:</p>
-<div id="38cf5617" class="cell" data-execution_count="8">
+<div id="a3451707" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>So now, if you want to use a <code>numpy</code> function we just use <code>np.X</code></p>
-<div id="0de2d2d5" class="cell" data-execution_count="9">
+<div id="a89ee3e1" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> np.arange(<span class="dv">3</span>, <span class="dv">938</span>, <span class="dv">53</span>)  <span class="co"># 938 is exclusive, so it matches R's inclusive 937</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>length <span class="op">=</span> <span class="bu">len</span>(b)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(length)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -295,7 +296,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>We can also make a new vector <code>d</code> using a vector <code>c</code>:</p>
-<div id="606d518e" class="cell" data-execution_count="10">
+<div id="10a9c3a8" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">51</span>)  <span class="co"># 1 to 50 inclusive</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> c</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -312,14 +313,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>And do maths on them, for example calculate the mean of <code>d</code>:</p>
-<div id="2a2805a4" class="cell" data-execution_count="11">
+<div id="15d721c8" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>mean_d <span class="op">=</span> np.mean(d)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mean_d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>0.08998410676658848</code></pre>
 </div>
 </div>
-<div id="2604640f" class="cell" data-execution_count="12">
+<div id="4b07790e" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>std_d <span class="op">=</span> np.std(d)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(std_d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -330,16 +331,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="conditionals" class="level2">
 <h2 class="anchored" data-anchor-id="conditionals">Conditionals</h2>
 <p>This is important stuff. If we want to ask whether something is equal to something else, we need to use the <code>==</code> operator, NOT <code>=</code>. Try this:</p>
-<div id="d2c9d03f" class="cell" data-execution_count="13">
+<div id="832caff2" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="dv">1</span>,<span class="dv">11</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">==</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="105">
+<div class="cell-output cell-output-display" data-execution_count="61">
 <pre><code>array([False, False, False, False,  True, False, False, False, False,
        False])</code></pre>
 </div>
 </div>
 <p>We can also do some other simple but important things:</p>
-<div id="dffa684e" class="cell" data-execution_count="14">
+<div id="83d1db56" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.where(x <span class="op">&lt;</span> <span class="dv">5</span>))</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.where(x <span class="op">&lt;=</span> <span class="dv">5</span>))</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.where(x <span class="op">&gt;=</span> <span class="dv">5</span>))</span>
@@ -354,7 +355,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Lets make another vector <code>y</code>:</p>
-<div id="7e49a3d0" class="cell" data-execution_count="15">
+<div id="e5bcddf2" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.arange(<span class="dv">7</span>,<span class="dv">16</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>common <span class="op">=</span> np.intersect1d(x, y)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(common)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -363,7 +364,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>What do you think this does?</p>
-<div id="05deae45" class="cell" data-execution_count="16">
+<div id="82828198" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> x[<span class="op">~</span>np.isin(x, y)]</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -374,11 +375,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="basic-plotting" class="level2">
 <h2 class="anchored" data-anchor-id="basic-plotting">Basic plotting</h2>
 <p>In order to plot, we need another module called <code>matplotlib</code>, specifically, a submodule called <code>pyplot</code> which can be thought of as base plotting in R (if you use R). Lets load it:</p>
-<div id="4c767e20" class="cell" data-execution_count="17">
+<div id="fb474130" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To plot we do:</p>
-<div id="19f7d34d" class="cell" data-execution_count="18">
+<div id="ea0852f6" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>plt.plot(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -390,7 +391,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Do some googling and see how you can add a title, label the x/y axis, make the line points instead, and colour them red.</p>
 <p>Here is how I would do it:</p>
-<div id="8f2dc0b4" class="cell" data-execution_count="19">
+<div id="8966f10f" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>plt.plot(c,d, marker<span class="op">=</span><span class="st">'o'</span>,color<span class="op">=</span><span class="st">"red"</span>)</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"c"</span>)</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Index"</span>)</span>
@@ -405,7 +406,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>We can make this plot a little fancier. Those who work in R will be familiar with <code>ggplot2</code> package, and there is a direct port to that in Python called <code>plotnine</code>. We use this in combaination with <code>pandas</code> which is the module that creates and handles data.frames (more on this later):</p>
-<div id="2472ab32" class="cell" data-execution_count="20">
+<div id="3b3c3ba5" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> ggplot, aes, geom_line, geom_point</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -418,7 +419,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    geom_point(color<span class="op">=</span><span class="st">'green'</span>)</span>
 <span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>p.draw()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="112">
+<div class="cell-output cell-output-display" data-execution_count="68">
 <div>
 <figure class="figure">
 <p><img src="index_files/figure-html/cell-21-output-1.png" width="678" height="486" class="figure-img"></p>
@@ -427,7 +428,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>If you want to do it the “pure” Pythin way (and we proabably should!) we can to the following using <code>seaborn</code> plus <code>matplotlib</code>:</p>
-<div id="7c9773d0" class="cell" data-execution_count="21">
+<div id="32b36ce4" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">'col1'</span>: c, <span class="st">'col2'</span>: d})</span>
@@ -454,7 +455,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="matricies" class="level1">
 <h1>Matricies</h1>
 <p>Matrices are the most common data format bioinformaticians work with. Microarray/RNAseq/single-cell data are all kept in matricies where gene are in the rows and samples down in the columns. Lets make a simple matrix of zeros using <code>numpy</code>:</p>
-<div id="47cf6ba2" class="cell" data-execution_count="22">
+<div id="877ac055" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> np.zeros((<span class="dv">10</span>, <span class="dv">5</span>))  <span class="co"># 10 rows, 5 columns</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -471,7 +472,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>This will create a matrix filled with zeros. To transpose (flip) the matrix we use t() (this will be important later!)</p>
-<div id="b7ed5c1e" class="cell" data-execution_count="23">
+<div id="11f1f549" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>tposed_m <span class="op">=</span> m.T</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(tposed_m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -483,7 +484,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>We usually need to name the rows and columns (genes/samples), so for that we need to switch to using a pandas dataframe because np matricies do not take labels:</p>
-<div id="23ebd278" class="cell" data-execution_count="24">
+<div id="e8fc7b46" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    m,</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>[<span class="st">"A"</span>,<span class="st">"B"</span>,<span class="st">"C"</span>,<span class="st">"D"</span>,<span class="st">"E"</span>,<span class="st">"F"</span>,<span class="st">"G"</span>,<span class="st">"H"</span>,<span class="st">"I"</span>,<span class="st">"J"</span>],</span>
@@ -507,7 +508,7 @@ J  0.0  0.0  0.0  0.0      0.0</code></pre>
 <section id="subsetting" class="level2">
 <h2 class="anchored" data-anchor-id="subsetting">Subsetting</h2>
 <p>Lets make a matrix (and a vector) containing integer values so we can take a look at how subsetting work in R:</p>
-<div id="040ce79d" class="cell" data-execution_count="25">
+<div id="0db22012" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#m = np.arange(1, 51).reshape((5, 10), order='F').T  # 10x5 after transpose</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">11</span>)</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -534,14 +535,14 @@ J   46   47   48   49       50</code></pre>
 </div>
 </div>
 <p>We can access individual elements using square brackets <code>[]</code>. So to get the 6th, 1st and 5th elements of <code>v</code> we need:</p>
-<div id="83631e47" class="cell" data-execution_count="26">
+<div id="c8ba4fb9" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(v[[<span class="dv">6</span>,<span class="dv">0</span>,<span class="dv">4</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[7 1 5]</code></pre>
 </div>
 </div>
 <p>Why? Because <strong>Python counts from 0.</strong> If you have been using R until now, you will know it is one based. To get the first element of a vector in R you would d <code>v[1]</code>, but this isn’t so in Python. In fact, pretty much all languages are 0 based. Wit this in mind, lets look ar the first row of the matrix <code>m</code>.</p>
-<div id="c94caf27" class="cell" data-execution_count="27">
+<div id="debc1a5c" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.iloc[<span class="dv">0</span>,:])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>cat        1
@@ -553,7 +554,7 @@ Name: A, dtype: int64</code></pre>
 </div>
 </div>
 <p>and the 3rd column:</p>
-<div id="8e7bb122" class="cell" data-execution_count="28">
+<div id="a8655d10" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.iloc[:,<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>A     3
@@ -569,7 +570,7 @@ J    48
 Name: pig, dtype: int64</code></pre>
 </div>
 </div>
-<div id="798e8df3" class="cell" data-execution_count="29">
+<div id="83c6cdea" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.iloc[:,[<span class="dv">1</span>,<span class="dv">4</span>]]) <span class="co"># the 2nd and 5th column</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   dog  chicken
@@ -585,7 +586,7 @@ I   42       45
 J   47       50</code></pre>
 </div>
 </div>
-<div id="54590b30" class="cell" data-execution_count="30">
+<div id="a205cd2c" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.iloc[:,[<span class="dv">1</span>,<span class="dv">4</span>]]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   dog  chicken
@@ -601,7 +602,7 @@ I   42       45
 J   47       50</code></pre>
 </div>
 </div>
-<div id="504d27bc" class="cell" data-execution_count="31">
+<div id="c1665e3d" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.iloc[<span class="dv">2</span>:<span class="dv">7</span>, <span class="dv">3</span>]) <span class="co"># the 3rd to 7th row of the 4th column. Remember 7 is exclusive</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>C    14
@@ -612,7 +613,7 @@ G    34
 Name: cow, dtype: int64</code></pre>
 </div>
 </div>
-<div id="f30e9cbc" class="cell" data-execution_count="32">
+<div id="46654d91" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.loc[<span class="st">"B"</span>,:]) <span class="co"># gets the row labelled B</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>cat         6
@@ -623,13 +624,13 @@ chicken    10
 Name: B, dtype: int64</code></pre>
 </div>
 </div>
-<div id="8a899e7d" class="cell" data-execution_count="33">
+<div id="d3abe893" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.loc[<span class="st">"B"</span>,<span class="st">"cow"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>9</code></pre>
 </div>
 </div>
-<div id="eaf6ce14" class="cell" data-execution_count="34">
+<div id="63a98a7f" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.loc[[<span class="st">"F"</span>, <span class="st">"J"</span>],[<span class="st">"chicken"</span>, <span class="st">"cat"</span>, <span class="st">"pig"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   chicken  cat  pig
@@ -638,7 +639,7 @@ J       50   46   48</code></pre>
 </div>
 </div>
 <p>We often need to collect vectors and assemble them into a matrix. This can be done using the rbind (row) and cbind (column) functions:</p>
-<div id="9ed21847" class="cell" data-execution_count="35">
+<div id="1527e378" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>v1 <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">11</span>)         <span class="co"># [1, 2, ..., 10]</span></span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>v2 <span class="op">=</span> np.arange(<span class="dv">101</span>, <span class="dv">111</span>)      <span class="co"># [101, 102, ..., 110]</span></span>
 <span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -654,7 +655,7 @@ J       50   46   48</code></pre>
 <section id="dictionaries" class="level1">
 <h1>Dictionaries</h1>
 <p>So far we have talked about vectors and matrices separately, but we often we want to collect these things and put them into one object under a single variable as a collection (for example expression data and gene annotation). To do this we use something called a <strong>dictionary</strong>.</p>
-<div id="fb2ee3b0" class="cell" data-execution_count="36">
+<div id="68a07e90" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> [<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span>, <span class="st">"F"</span>, <span class="st">"G"</span>, <span class="st">"H"</span>]</span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>mat <span class="op">=</span> np.random.randn(<span class="dv">8</span>, <span class="dv">5</span>)  <span class="co"># 8 rows, 5 columns of random normal values</span></span>
 <span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -664,27 +665,27 @@ J       50   46   48</code></pre>
 <span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You can see that each item is given a name <code>char</code> <code>nums</code> before it is put into the list. Each element can now be accessed via <code>[]</code>:</p>
-<div id="cc39b4a6" class="cell" data-execution_count="37">
+<div id="2fef017e" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>listex1[<span class="st">"char"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="129">
+<div class="cell-output cell-output-display" data-execution_count="85">
 <pre><code>['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']</code></pre>
 </div>
 </div>
 <p>So to access the 3rd element of the vector:</p>
-<div id="8d72fe42" class="cell" data-execution_count="38">
+<div id="21b744a1" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>listex1[<span class="st">"char"</span>][<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="130">
+<div class="cell-output cell-output-display" data-execution_count="86">
 <pre><code>'C'</code></pre>
 </div>
 </div>
 <p>And the first row of the dataframe:</p>
-<div id="1a944dcf" class="cell" data-execution_count="39">
+<div id="f9259a56" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>listex1[<span class="st">"nums"</span>][<span class="dv">0</span>,:]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="131">
-<pre><code>array([ 1.68682848,  0.77122394, -0.63546271,  0.80133946,  0.47016178])</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="87">
+<pre><code>array([-2.19118127, -2.79205819,  0.89851935,  0.16681805,  0.47109405])</code></pre>
 </div>
 </div>
-<div id="b11df763" class="cell" data-execution_count="40">
+<div id="38274570" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
 <span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>iris_data <span class="op">=</span> load_iris(as_frame<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> iris_data.frame  <span class="co"># pandas DataFrame</span></span>
@@ -692,7 +693,7 @@ J       50   46   48</code></pre>
 <span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample 10 random rows</span></span>
 <span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>iris.head(<span class="dv">5</span>)</span>
 <span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a><span class="co">#type(iris)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="132">
+<div class="cell-output cell-output-display" data-execution_count="88">
 <div>
 
 
@@ -754,7 +755,7 @@ J       50   46   48</code></pre>
 </div>
 </div>
 </div>
-<div id="ef69b9e6" class="cell" data-execution_count="41">
+<div id="c5926b1c" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>plt.scatter(iris[<span class="st">"sepal length (cm)"</span>], iris[<span class="st">"sepal width (cm)"</span>])</span>
 <span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Sepal Length"</span>)</span>
 <span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Sepal Width"</span>)</span>
@@ -768,7 +769,7 @@ J       50   46   48</code></pre>
 </div>
 </div>
 </div>
-<div id="46c2d9bf" class="cell" data-execution_count="42">
+<div id="fda26826" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>iris[<span class="st">"species"</span>] <span class="op">=</span> iris_data.target_names[iris_data.target]</span>
 <span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the plot</span></span>
@@ -786,60 +787,19 @@ J       50   46   48</code></pre>
 </div>
 </div>
 </div>
-<div id="340752d6" class="cell" data-execution_count="43">
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iris_data.target_names)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>['setosa' 'versicolor' 'virginica']</code></pre>
-</div>
-</div>
-<div id="2186138a" class="cell" data-execution_count="44">
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>iris_data.target_names[iris_data.target]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="136">
-<pre><code>array(['setosa', 'setosa', 'setosa', 'setosa', 'setosa', 'setosa',
-       'setosa', 'setosa', 'setosa', 'setosa', 'setosa', 'setosa',
-       'setosa', 'setosa', 'setosa', 'setosa', 'setosa', 'setosa',
-       'setosa', 'setosa', 'setosa', 'setosa', 'setosa', 'setosa',
-       'setosa', 'setosa', 'setosa', 'setosa', 'setosa', 'setosa',
-       'setosa', 'setosa', 'setosa', 'setosa', 'setosa', 'setosa',
-       'setosa', 'setosa', 'setosa', 'setosa', 'setosa', 'setosa',
-       'setosa', 'setosa', 'setosa', 'setosa', 'setosa', 'setosa',
-       'setosa', 'setosa', 'versicolor', 'versicolor', 'versicolor',
-       'versicolor', 'versicolor', 'versicolor', 'versicolor',
-       'versicolor', 'versicolor', 'versicolor', 'versicolor',
-       'versicolor', 'versicolor', 'versicolor', 'versicolor',
-       'versicolor', 'versicolor', 'versicolor', 'versicolor',
-       'versicolor', 'versicolor', 'versicolor', 'versicolor',
-       'versicolor', 'versicolor', 'versicolor', 'versicolor',
-       'versicolor', 'versicolor', 'versicolor', 'versicolor',
-       'versicolor', 'versicolor', 'versicolor', 'versicolor',
-       'versicolor', 'versicolor', 'versicolor', 'versicolor',
-       'versicolor', 'versicolor', 'versicolor', 'versicolor',
-       'versicolor', 'versicolor', 'versicolor', 'versicolor',
-       'versicolor', 'versicolor', 'versicolor', 'virginica', 'virginica',
-       'virginica', 'virginica', 'virginica', 'virginica', 'virginica',
-       'virginica', 'virginica', 'virginica', 'virginica', 'virginica',
-       'virginica', 'virginica', 'virginica', 'virginica', 'virginica',
-       'virginica', 'virginica', 'virginica', 'virginica', 'virginica',
-       'virginica', 'virginica', 'virginica', 'virginica', 'virginica',
-       'virginica', 'virginica', 'virginica', 'virginica', 'virginica',
-       'virginica', 'virginica', 'virginica', 'virginica', 'virginica',
-       'virginica', 'virginica', 'virginica', 'virginica', 'virginica',
-       'virginica', 'virginica', 'virginica', 'virginica', 'virginica',
-       'virginica', 'virginica', 'virginica'], dtype='&lt;U10')</code></pre>
-</div>
-</div>
-<div id="1436f7a2" class="cell" data-execution_count="45">
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>iris_sp <span class="op">=</span> {species: data <span class="cf">for</span> species, data <span class="kw">in</span> iris.groupby(<span class="st">"species"</span>)}</span>
-<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the keys (species names) of the dictionary</span></span>
-<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(iris_sp.keys())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="137">
+<p>We can also break up a data frame up on attributes and store the contents in a list (which we have already discussed). For example by species:</p>
+<div id="91b22ebb" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>iris_sp <span class="op">=</span> {species: data <span class="cf">for</span> species, data <span class="kw">in</span> iris.groupby(<span class="st">"species"</span>)}</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the keys (species names) of the dictionary</span></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(iris_sp.keys())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="91">
 <pre><code>['setosa', 'versicolor', 'virginica']</code></pre>
 </div>
 </div>
-<div id="fbd76621" class="cell" data-execution_count="46">
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>iris_sp[<span class="st">'setosa'</span>].iloc[<span class="dv">0</span>:<span class="dv">3</span>, :<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="138">
+<div id="c64b3b07" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>iris_sp[<span class="st">'setosa'</span>].iloc[<span class="dv">0</span>:<span class="dv">3</span>, :<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="92">
 <div>
 
 
@@ -877,9 +837,9 @@ J       50   46   48</code></pre>
 </div>
 </div>
 </div>
-<div id="815674ab" class="cell" data-execution_count="47">
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>iris_sp[<span class="st">'versicolor'</span>].iloc[<span class="dv">0</span>:<span class="dv">3</span>, :<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="139">
+<div id="2fe50d32" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>iris_sp[<span class="st">'versicolor'</span>].iloc[<span class="dv">0</span>:<span class="dv">3</span>, :<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="93">
 <div>
 
 
@@ -917,6 +877,255 @@ J       50   46   48</code></pre>
 </div>
 </div>
 </div>
+<p>Let do some basic filtering and manipulation of this data. First, filter just for those which are setosa:</p>
+<div id="0898aa5b" class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>setosa_data <span class="op">=</span> iris[iris[<span class="st">"species"</span>] <span class="op">==</span> <span class="st">"setosa"</span>]</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>setosa_data.iloc[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="94">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">sepal length (cm)</th>
+<th data-quarto-table-cell-role="th">sepal width (cm)</th>
+<th data-quarto-table-cell-role="th">petal length (cm)</th>
+<th data-quarto-table-cell-role="th">petal width (cm)</th>
+<th data-quarto-table-cell-role="th">target</th>
+<th data-quarto-table-cell-role="th">species</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>5.1</td>
+<td>3.5</td>
+<td>1.4</td>
+<td>0.2</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>4.9</td>
+<td>3.0</td>
+<td>1.4</td>
+<td>0.2</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>4.7</td>
+<td>3.2</td>
+<td>1.3</td>
+<td>0.2</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4.6</td>
+<td>3.1</td>
+<td>1.5</td>
+<td>0.2</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5.0</td>
+<td>3.6</td>
+<td>1.4</td>
+<td>0.2</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Select 3 specific columsn of the data</p>
+<div id="dd8f3b90" class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>iris_subset <span class="op">=</span> iris[[<span class="st">"sepal length (cm)"</span>, <span class="st">"sepal width (cm)"</span>, <span class="st">"species"</span>]]</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>iris_subset.iloc[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="95">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">sepal length (cm)</th>
+<th data-quarto-table-cell-role="th">sepal width (cm)</th>
+<th data-quarto-table-cell-role="th">species</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>5.1</td>
+<td>3.5</td>
+<td>setosa</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>4.9</td>
+<td>3.0</td>
+<td>setosa</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>4.7</td>
+<td>3.2</td>
+<td>setosa</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4.6</td>
+<td>3.1</td>
+<td>setosa</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5.0</td>
+<td>3.6</td>
+<td>setosa</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Sort on a field:</p>
+<div id="80657b99" class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>iris_sorted <span class="op">=</span> iris.sort_values(<span class="st">"sepal length (cm)"</span>)</span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>iris_sorted.head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="96">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">sepal length (cm)</th>
+<th data-quarto-table-cell-role="th">sepal width (cm)</th>
+<th data-quarto-table-cell-role="th">petal length (cm)</th>
+<th data-quarto-table-cell-role="th">petal width (cm)</th>
+<th data-quarto-table-cell-role="th">target</th>
+<th data-quarto-table-cell-role="th">species</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">13</td>
+<td>4.3</td>
+<td>3.0</td>
+<td>1.1</td>
+<td>0.1</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8</td>
+<td>4.4</td>
+<td>2.9</td>
+<td>1.4</td>
+<td>0.2</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">42</td>
+<td>4.4</td>
+<td>3.2</td>
+<td>1.3</td>
+<td>0.2</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">38</td>
+<td>4.4</td>
+<td>3.0</td>
+<td>1.3</td>
+<td>0.2</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">41</td>
+<td>4.5</td>
+<td>2.3</td>
+<td>1.3</td>
+<td>0.3</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">22</td>
+<td>4.6</td>
+<td>3.6</td>
+<td>1.0</td>
+<td>0.2</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4.6</td>
+<td>3.1</td>
+<td>1.5</td>
+<td>0.2</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6</td>
+<td>4.6</td>
+<td>3.4</td>
+<td>1.4</td>
+<td>0.3</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">47</td>
+<td>4.6</td>
+<td>3.2</td>
+<td>1.4</td>
+<td>0.2</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>4.7</td>
+<td>3.2</td>
+<td>1.3</td>
+<td>0.2</td>
+<td>0</td>
+<td>setosa</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="reading-and-writing-files" class="level1">
+<h1>Reading and writing files</h1>
+<p>You have to get the data into R first before you can analyse it (this helps a lot). R has many useful functions to do this, so now we can take our first look at some expression data. Download this file (https://github.com/shambam/R_programming_1/blob/main/Mouse_HSPC_reduced.txt) and save it to your current working directory.</p>
+<p>Exercise: Open the file in Excel or something to see how it looks, and then call help(read.delim) in your console. Try to work out how the file you are looking at could be read into R using this function.</p>
+<p>This is how I would do it:</p>
 
 
 </section>

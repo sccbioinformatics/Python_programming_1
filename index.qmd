@@ -416,14 +416,7 @@ plt.show()
 ```
 
 
-```{python}
-print(iris_data.target_names)
-```
-
-```{python}
-iris_data.target_names[iris_data.target]
-```
-
+We can also break up a data frame up on attributes and store the contents in a list (which we have already discussed). For example by species:
 
 ```{python}
 
@@ -444,11 +437,31 @@ iris_sp['versicolor'].iloc[0:3, :3]
 ```
 
 
+Let do some basic filtering and manipulation of this data. First, filter just for those which are setosa:
+```{python}
+setosa_data = iris[iris["species"] == "setosa"]
+setosa_data.iloc[:5]
+```
+
+Select 3 specific columsn of the data
+
+```{python}
+iris_subset = iris[["sepal length (cm)", "sepal width (cm)", "species"]]
+iris_subset.iloc[:5]
+```
+
+Sort on a field:
+
+```{python}
+iris_sorted = iris.sort_values("sepal length (cm)")
+iris_sorted.head(10)
+```
 
 
+# Reading and writing files
 
+You have to get the data into R first before you can analyse it (this helps a lot). R has many useful functions to do this, so now we can take our first look at some expression data. Download this file (https://github.com/shambam/R_programming_1/blob/main/Mouse_HSPC_reduced.txt) and save it to your current working directory.
 
+Exercise: Open the file in Excel or something to see how it looks, and then call help(read.delim) in your console. Try to work out how the file you are looking at could be read into R using this function.
 
-
-
-
+This is how I would do it:
