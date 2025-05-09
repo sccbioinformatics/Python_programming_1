@@ -4,62 +4,55 @@ title: ""
 
 # Introduction
 
-The purpose of this course is to teach you the basics of the R language and give you the confidence to tackle larger projects using the language. *Importantly, we want to get you thinking like a programmer*. This doesn't mean that by the end of the course you will know R fully, but you will know enough so you can go online and look for the help you need to complete most tasks.
+The purpose of this course is to teach you the basics of the Python language and give you the confidence to tackle larger projects using the language. *Importantly, we want to get you thinking like a programmer*. This doesn't mean that by the end of the course you will know Python fully, but you will know *enough* so you can go online and look for the help you need to complete most tasks.
 
 ## Practice makes perfect
 
 Programming is like any skill, the more you practice the better you get. ***It's really important that you keep using what you have learned after the course is completed*** otherwise there is a good chance you will forget everything and you'll be back to square one.
 
-## Why Use R?
+## Why use Python?
 
-R is a high-level programming language with a focus on mathematics and statistics, but R can be used for a wide variety of applications given the flexibility of the language. R is also free, and available for all operating systems. Given the richness of the language and no cost to use it, bioinformaticians have used R for more than 20 years as the platform for which which to develop packages to solve bioinformatics problems.
-
-The [BioConductor Project](https://www.bioconductor.org/) is a repository for bioinformatics tools which continues to grow, and hosts packages such as DESeq2 which you may have heard of. Some other popular packages such as Seurat aren't actually hosted by Bioconductor, but in the main R package repository. We'll cover package installation later later.
+Python is a high-level **general** programming language (unlike R which has a focus on mathematics and statistics) so Python can be used for a wide variety of applications. When it comes to machine learning, Python seems to have the edge and is preferred by the data scientist community for it;s AI/ML capabilitioes. In bioinformatics we see Python making real in-roads as more packages become available. One of the most popular ones being [Scanpy](https://scanpy.readthedocs.io/en/stable/) and the [scverse](https://scverse.org) which handle single-cell analysis Python is free and available for all operating systems. 
 
 ## Which other languages do bioinformaticians use?
 
-The Python language has been rocketing in popularity for the past few years, particularly among data scientists who make use of the AI/ML tools such as Tensorflow and PyTorch. Scanpy is a very popular package for single-cell analysis. For very computationally intensive tasks (e.g sequence alignment), languages such as C/C++/Rust are more commonly used, but these are far more difficult to learn.
+[R](https://cran.r-project.org) of course which has a long rich history in boinformatics, and most will have heard of [Bioconductor](https://www.bioconductor.org) which is a collection of packages to anaylse biological and genomics data. For very computationally intensive tasks (e.g sequence alignment), languages such as C/C++/Rust are more commonly used, but these are far more difficult to learn.
 
 ## How will this course work?
 
-We're going to take a different approach to this course. You will be taught the basics of the R language while doing small exercises along the way. However, we will finish by you undertaking a project which will push you quite hard. The aim is that by tacking a more difficult problem will consolidate what you have learnt, and learn more by having to look up solutions to the problems you will likely face.
+We're going to take a different approach to this course. You will be taught the basics of the Python language while doing small exercises along the way. However, we will finish by you undertaking a project which will push you quite hard. The aim is that by tacking a more difficult problem will consolidate what you have learnt, and learn more by having to look up solutions to the problems you will likely face.
 
-## Getting R and RStudio
+## Getting Python
 
-Point your browser to <http://cran.r-project.org/> to download and install the latest version of R. For these tutorials we are also going to use [RStudio](http://www.rstudio.com/) which is an advanced development environment for R which includes a window for an editor, console, and plotting window. You will see what this means later.
+Python is slightly different in that we make "environments" on our computers and work within these environment which makes them self-contained. You need to install Miniconda, so go [here](https://www.anaconda.com/docs/getting-started/miniconda/main) and follow the instructions to install Miniconda on your system.
 
-# Rstudio
+When you have installed Miniconda, we need to make an environment and install Python and some other packages that we need to get going. On your computer, open a terminal and do:
 
-Open up RStudio, and it will look something like this:
+```
+conda create -n workshop.env python=3.10
+```
+And when this is done, activate the enviroment by doing:
+```
+conda activate workshop.env
+```
 
-![](images/Rstudio_new.png)
+You are now inside the `workshop.env` environment. Anything you install/do here, will stay here.
 
-The different parts are:
+Lets install some packages that we'll need:
 
-1.  The code editor. This is where you write code.
-2.  The R console. This is the R environment where R code is executed.
-3.  Workspace. The objects you create along the way will be listed here.
-4.  Plots and files. Plots will render here, and files can be browsed in the "Files" pane.
+```
+conda install -c conda-forge jupyterlab notebook nbclient ipykernel pandas matplotlib numpy
+```
 
-Before we start, we need to do a little prep.
+We also need to register this environment as a Jupyter kernel we will use to run commands:
 
-1.  On your computer, make a folder called "Rcourse1".
+```
+python -m ipykernel install --user --name quarto-env --display-name "Python (quarto-env)"
+```
 
-We then set the working directory to this folder, so
+# Choosing an editor
 
-2.  In RStudio go to Session \> Set Working Directory \> Choose Directory and find the "Rcourse1" folder and select it.
 
-RStudio will now be looking for files in this folder, and any saved plots will be put here unless stated otherwise.
-
-Now, go to File \> New File \> R Script
-
-A new empty script will open up in the top left window. Go to File \> Save and give it a name. It will be saved to you current working directory. You should see your file being added to the list in the Plot and Files pane.
-
-Now that we've done our prep, let do some R.
-
-# The Basics
-
-We'll now look at some basic operations. The code should be copied into your R script as we go along.
 
 ## Assigning a variable.
 
@@ -460,8 +453,47 @@ iris_sorted.head(10)
 
 # Reading and writing files
 
-You have to get the data into R first before you can analyse it (this helps a lot). R has many useful functions to do this, so now we can take our first look at some expression data. Download this file (https://github.com/shambam/R_programming_1/blob/main/Mouse_HSPC_reduced.txt) and save it to your current working directory.
+You have to get the data into R first before you can analyse it (this helps a lot). R has many useful functions to do this, so now we can take our first look at some expression data. Download this [file](https://github.com/sccbioinformatics/Python_programming_1/blob/main/Mouse_HSPC_reduced.txt) and save it to your current working directory.
 
-Exercise: Open the file in Excel or something to see how it looks, and then call help(read.delim) in your console. Try to work out how the file you are looking at could be read into R using this function.
+***Exercise***: Open the file in Excel or something to see how it looks. As we want a **named** matrix we know that we want a `pandas` dataframe. So call `help(pd.read_csv)` in the terminal and try to work out how to import this file.
 
 This is how I would do it:
+
+```{python}
+#| code-fold: true
+hspc_data = pd.read_csv("Mouse_HSPC_reduced.txt", sep="\t", header=0, index_col=0)
+```
+
+
+Lets look are the first few lines:
+
+```{python}
+hspc_data.head(5)
+```
+
+Lets have a look at the dimensions of the data. In the `pandas` module we have the `shape` function to get this:
+
+```{python}
+hspc_data.shape
+```
+
+We can access the individal components of this using:
+
+```{python}
+hspc_data.shape[0]
+```
+
+```{python}
+hspc_data.shape[1]
+```
+
+Lets take a look at the column names and see what they look like:
+
+```{python}
+list(hspc_data.columns)
+```
+
+It's quite common that we need to break a table up. In this case, we want to separate the different populations into dataframes called `lthsc`,`mep`, and `gmp`.
+
+To do this we need to get to the string atributes of the column headers, and to do this we need to use `.str` and the functions contained within.
+

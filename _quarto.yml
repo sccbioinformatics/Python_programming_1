@@ -3,7 +3,7 @@ project:
 jupyter: quarto.env
 
 website:
-  title: "Python_programming_1"
+  title: "Python programming I"
   navbar:
     left:
       - href: index.qmd
