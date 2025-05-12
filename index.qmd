@@ -50,9 +50,17 @@ We also need to register this environment as a Jupyter kernel we will use to run
 python -m ipykernel install --user --name quarto-env --display-name "Python (quarto-env)"
 ```
 
-# Choosing an editor
+## Choosing an editor
 
+Ask a hundred different programmer which editor is best, and you will get a hundred different answers. These are the two which people tend to recommend the most when asked:
 
+1. [VScode](https://code.visualstudio.com). This is a general purpose editor which is really popular. It will handle pretty much all languages, and plugins will make it easier to write and run code. This is the one I use, and the one we#ll use fo this course.
+
+2. [PyCharm](https://www.jetbrains.com/pycharm/). This is a Python specific editor which has a rediculous number of features. You can play with this in your own time!
+
+# The basics
+
+Lets start gently and go through a few simple things to warm up.
 
 ## Assigning a variable.
 
@@ -222,7 +230,7 @@ p = (
 p.draw()
 ```
 
-If you want to do it the "pure" Pythin way (and we proabably should!) we can to the following using `seaborn` plus `matplotlib`:
+If you want to do it the "pure" Python way (and we probably should!) we can to the following using `seaborn` plus `matplotlib`:
 
 ```{python}
 
@@ -240,6 +248,9 @@ plt.xlabel("col1")
 plt.ylabel("col2")
 plt.show()
 ```
+
+Lets have a look at the manual for pandas. Go [here](https://pandas.pydata.org/docs/index.html). This modules has extensive documentation, and at the top you can clokc on "API" which will list out all the methods which can be used on a `pandas` DataFrame.
+
 
 # Matricies
 
@@ -495,5 +506,142 @@ list(hspc_data.columns)
 
 It's quite common that we need to break a table up. In this case, we want to separate the different populations into dataframes called `lthsc`,`mep`, and `gmp`.
 
-To do this we need to get to the string atributes of the column headers, and to do this we need to use `.str` and the functions contained within.
+To do this we need to get to the string atributes of the column headers, and to do this we need to use `.str` and the functions contained within. an example of this:
 
+```{python}
+mep_data = hspc_data.loc[:, hspc_data.columns.str.contains("MEP")]
+```
+
+Let break this down inside out. `hspc_data.columns.str.contains("MEP")` accessing the string functions using `.str`, and then uses the `.contains` function to ask which of the `.columns` contains "MEP". We then pass the results of this to `hspc_data.loc` to pull out the corresponsing columns.
+
+Lets run the inner part by itself:
+
+```{python}
+hspc_data.columns.str.contains("MEP")
+```
+
+We can also get the same results by using `.startswith` instead:
+
+```{python}
+hspc_data.columns.str.startswith("MEP")
+```
+
+***Exercise***: Isolate the data for the LTHSC and GMP data into objects called `lthsc_data` and `gmp_data`.
+
+```{python}
+#| code-fold: true
+lthsc_data = hspc_data.loc[:, hspc_data.columns.str.contains("LTHSC")]
+gmp_data = hspc_data.loc[:, hspc_data.columns.str.contains("GMP")]
+```
+
+Let have a look at another important task, writing out a file.
+
+***Exercise***: Call `pd.DataFrame.to_csv` and have a look at the help page. Try and figure out how to write the `lthsc_data` to a file called `LTHSC_data.txt`.
+
+
+```{python}
+#| code-fold: true
+lthsc_data.to_csv("LTHSC_data.txt", sep="\t", index=True, header=True)
+```
+
+***Exercise***: Write out the other two files!
+
+```{python}
+#| code-fold: true
+mep_data.to_csv("MEP_data.txt", sep="\t", index=True, header=True)
+gmp_data.to_csv("GMP_data.txt", sep="\t", index=True, header=True)
+```
+
+# Flow control basics
+
+This is where things get more interesting and we start to feel like "proper" programmers. Now that we have these datasets loaded in Python, we can use them to learn about flow control and some basic mathematical functions. We are going to do a few things the “long way” so you get the idea of how flow control works, and then we’ll look at some shortcuts.
+
+Flow control is how multi-step processes (such as algorithms) are carried out. In the example below we print out the numbers 1 to 10:
+
+```{python}
+for i in range(10):
+    print(i)
+```
+
+To translate this code, it simply says for every integer from 0 to 9, print this value to the screen.
+
+***Exercises***:
+
+1. Using the example above, print the first 10 lines of 'lthcs_data' in a for loop.
+
+
+```{python}
+#| code-fold: true
+#| eval: false
+for i in range(10):
+    print(hspc_data.iloc[i,:])
+```
+
+2. Print every 2nd line of `mep_data` from lines 0 to 49.
+
+```{python}
+#| code-fold: true
+#| eval: false
+for i in range(0,50,2):
+    print(hspc_data.iloc[i,:])
+```
+
+
+An important point regarding for loops is that any processes/calculations occurring within the loop will stay in the loop. If data generated within a loop has to be retained, we need to create a container to “fill up” while the loop is being carried out. for example:
+
+```{python}
+vec = []
+
+for i in range(10):
+    vec.append(i * 10)
+
+print(vec)
+```
+
+The empty container `vec` is initialised outside the loop, and then populated by concatenating to it using `append` after every iteration of the loop.
+
+***Exercise***: Initialise an empty container, and for `gmp_data`, calculate the mean of each row (gene), and store the results in the container you made.
+
+
+```{python}
+gmp_row_means = []
+for i in range(gmp_data.shape[0]):
+    gmp_row_means.append(gmp_data.iloc[i,:].mean())
+print(len(gmp_row_means))
+```
+
+Another method of flow control is `while`. for example:
+
+```{python}
+w = 0
+while (w <= 5):
+    print(w)
+    w = w + 1
+```
+
+We will cover `if` and `else` a bit later.
+
+# Functions
+
+Functions are chunks of code that execute several lines of code at once to perform a task. Once you have a few lines of useful code that you want to apply repeatedly, a function is a nice way to wrap them up so it can be used quickly when needed. Lets turn the code you wrote in the previous exercise into a function where we also calculate the variance for a gene.
+
+```{python}
+def calc_mean_and_var(mat):
+    means = []
+    variances = []
+    
+    for i in range(mat.shape[0]):
+        row = mat.iloc[i, :]
+        means.append(np.mean(row))
+        variances.append(np.var(row))
+
+    return {"mns": means, "vars": variances} # This line gives us back what we need.
+```
+
+Here, you can see a loop is started, and the output from each loop is appended to containers `means` and `variances`. These are both put into a list which is returned at the end. By putting this code into a function we can now calculate the means and deviations of any matrix in one line of code. For example, the `gmp` data:
+
+```{python}
+gmp_mn_var = calc_mean_and_var(gmp_data)
+print(gmp_mn_var["mns"])
+print(gmp_mn_var["vars"])
+```
