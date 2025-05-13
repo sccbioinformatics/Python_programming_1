@@ -604,6 +604,7 @@ The empty container `vec` is initialised outside the loop, and then populated by
 
 
 ```{python}
+#| eval: false
 gmp_row_means = []
 for i in range(gmp_data.shape[0]):
     gmp_row_means.append(gmp_data.iloc[i,:].mean())
@@ -641,7 +642,254 @@ def calc_mean_and_var(mat):
 Here, you can see a loop is started, and the output from each loop is appended to containers `means` and `variances`. These are both put into a list which is returned at the end. By putting this code into a function we can now calculate the means and deviations of any matrix in one line of code. For example, the `gmp` data:
 
 ```{python}
+#| eval: false
 gmp_mn_var = calc_mean_and_var(gmp_data)
 print(gmp_mn_var["mns"])
 print(gmp_mn_var["vars"])
+```
+We can also use functions to demonstrate `if` and `else` statements reagarding flow control. Lets have a look at this using a silly example:
+
+
+```{python}
+def animal_maths(value1, value2, animal="pig"):
+    if animal == "pig":
+        print(value1 / value2)
+    elif animal == "cow":
+        print(value1 * value2)
+```
+
+... and run it:
+
+```{python}
+animal_maths(10, 5, "pig")
+```
+
+```{python}
+animal_maths(10, 5, "cow")
+```
+
+What happens if we do this?
+
+```{python}
+animal_maths(10, 5, "dog")
+```
+
+What we need to do here is a little "exemption handling". You can't rely on the user doing the correct thing, so we need to account for any odd things that happen. In this case, the user has put an animal into the function which isn't accounted for by  the function. Let's modify the function to let the user know they screwed up:
+
+```{python}
+def animal_maths(value1, value2, animal="pig"):
+    if animal == "pig":
+        print(value1 / value2)
+    elif animal == "cow":
+        print(value1 * value2)
+    else:(print("I don't recognise this animal!"))
+```
+
+```{python}
+animal_maths(10, 5, "dog")
+```
+
+We're using Python, so we should do this the more "Pythonic" way, and there is a really cool way of doing this using a dictionary to lookup what needs to be done:
+
+```{python}
+def animal_maths(value1, value2, animal="pig"):
+    operations = {
+        "pig": lambda x, y: x / y,
+        "cow": lambda x, y: x * y
+    }
+    if animal in operations:
+        print(operations[animal](value1, value2))
+    else:
+        print("Unknown animal")
+
+animal_maths(10, 5, "pig")
+```
+
+What we do here is provide the options in a dictionary where each one is an unnamed function (lambda function), so all we need is to provide one `if` and one `else`, as opposed to `if` > `elif` > `else`.
+
+```{python}
+animal_maths(10, 5, "cow")
+```
+
+# Using built-in functions
+
+Libraries such as `pandas` have a host of functions that can be applied to `pandas` DataFrames. Let have a look at this code which calculated row means and variances of a matrix:
+
+
+```{python}
+def calc_mean_and_var(mat):
+    means = []
+    variances = []
+    
+    for i in range(mat.shape[0]): # <<< This is slow!
+        row = mat.iloc[i, :]
+        means.append(np.mean(row))
+        variances.append(np.var(row))
+
+    return {"mns": means, "vars": variances} 
+```
+
+This function loops through each line which is computationally *really* slow as each line had to be interpreted in turn. Lets try this instead:
+
+```{python}
+gmp_row_means = gmp_data.mean(axis=1)
+```
+
+This is so much faster.
+
+***Exercise***: Write a function called `calc_mean_and_var_fast` which uses this method to calculate row means and variances for a matrix.
+
+```{python}
+def calc_mean_and_var_fast(mat):
+    return {
+        "mns": mat.mean(axis=1),
+        "vars": mat.var(axis=1)
+    }
+```
+
+We can use the `time` library to measure how long it takes to run a functions. Slow one first:
+
+```{python}
+#| eval: true
+import time
+
+start_time = time.time()
+result = calc_mean_and_var(gmp_data)  # Call your function
+end_time = time.time()
+
+print(f"Time taken: {end_time - start_time:.6f} seconds")
+```
+
+Now the fast version:
+
+```{python}
+import time
+
+start_time = time.time()
+result = calc_mean_and_var_fast(gmp_data)  # Call your function
+end_time = time.time()
+
+print(f"Time taken: {end_time - start_time:.6f} seconds")
+```
+
+# Apply
+`apply` is a commonly used function in Python to speed up matrix calculation when you have a custom function that you would like to use. For eample, lets take a nonsense operation:
+
+
+```{python}
+def example_func(v):
+    val = (np.mean(v) * np.std(v)) / np.sum(v)
+    return val
+
+ex_apply = gmp_data.apply(example_func, axis=1)
+```
+
+We'll likely use this a bit later!
+
+# Getting highly varable genes.
+
+Lets start doing some work with this data, and first we'll define a function that isloates the *N* highest varable genes in the `hspc_data`.
+
+```{python}
+def get_top_variable_genes(mat, top_n=500):
+    variances = mat.var(axis=1, ddof=1)
+    top_genes = variances.nlargest(top_n).index
+    return mat.loc[top_genes]
+```
+
+Lets run it.
+
+```{python}
+hspc_var = get_top_variable_genes(hspc_data)
+hspc_var.head(5)
+```
+
+# Standardising data
+
+Lets stick with our expression data and cluster it. Doing so, we'll learn more of the language, and some of the fundamental maths that runs underneath. Lets take a look at the range of the data, i.e. getting the lowest and highest value in the matrix of variable genes we just made.
+
+```{python}
+hspc_var.values.min(), hspc_var.values.max()
+```
+
+For some operations (such as making heatmaps) the data needs to be z-score normalised (scaled) first. When we scale data, each row of gene is standarised so that it's mean = 0 and sd = 1. Specifically for a gene `g` of the i-th row:
+
+$$Z_i=\frac{g_i-\hat{g}}{\sigma g_i}$$
+
+Which means for every gene ($g_i$) we subtract the mean expression of the gene ($\hat{g)}$) to each expression value ($g_i$) and divide by the standard deviation of the expression of the gene ($\sigma g_i$).
+
+***Exercise***: Write a function called `zscore` which will take a single vector of values `v` and scale them. When you have done this, apply this to the hspc.var matrix to scale all rows and call it `hspc_zs`.
+
+```{python}
+
+def zscore(v):
+    zv = (v - np.mean(v))/(np.std(v,ddof=1))
+    return zv
+
+
+hspc_zs = hspc_var.apply(zscore,1)
+print(hspc_zs.shape)
+hspc_zs.head(5)
+
+```
+
+Lets make a boxplot of the data before and after scaling:
+
+Before:
+
+```{python}
+hspc_var.boxplot(rot=90)  # rot=90 rotates x-axis labels vertically (like las=2)
+plt.show()
+```
+
+After:
+
+```{python}
+hspc_zs.boxplot(rot=90)  # rot=90 rotates x-axis labels
+plt.show()
+```
+
+<!-- ***Exercise***: Do some Googling and see if there is already a `zscore` function somewhere in Python that will calculate z-scores for you. Use it to z-score your data and save the output in `hspc_zs_v2`. There are maybe a couple of ways that you can do it. -->
+
+# Clustering
+All the steps before have been leading to this, clustering the data and making heatmaps - a staple method in bioinformatics.
+
+Clustering is one of the most common visualisation techniques for genes expression data. Here we will learn how to do some basic histograms/heatmaps and plotting. To do this we need to bring in the `scipy` [library](https://docs.scipy.org/doc/scipy/index.html) which is a library for engineering, maths, and stats. In this case we are going to pull in the `cluster` package and within, the `hierarchy` module.
+
+
+```{python}
+import scipy.cluster.hierarchy as sch
+
+linkage_matrix = sch.linkage(hspc_var, method='ward')
+
+# Create the dendrogram
+plt.figure(figsize=(10, 6))
+sch.dendrogram(linkage_matrix, labels=hspc_var.index.tolist(), leaf_rotation=90)
+plt.title("Dendrogram of Rows (hspc_var)")
+plt.xlabel("Sample")
+plt.ylabel("Distance")
+plt.tight_layout()
+plt.show()
+
+```
+
+
+```{python}
+import scipy.spatial.distance as ssd
+dist_matrix = ssd.pdist(hspc_zs, metric='euclidean')
+
+# Step 2: Hierarchical clustering (like R's hclust)
+linkage_matrix = sch.linkage(dist_matrix, method='ward')  # or "ward", "average", etc.
+
+# Step 3: Plot dendrogram (like R's plot)
+plt.figure(figsize=(10, 6))
+sch.dendrogram(linkage_matrix, labels=hspc_zs.index.tolist(), leaf_rotation=90)
+plt.title("Hierarchical Clustering of Genes")
+plt.xlabel("Genes")
+plt.ylabel("Distance")
+plt.tight_layout()
+plt.show()
+
+
+#lo = sch.dendrogram(linkage_matrix)
 ```
