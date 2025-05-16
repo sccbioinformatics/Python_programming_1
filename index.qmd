@@ -860,7 +860,7 @@ Clustering is one of the most common visualisation techniques for genes expressi
 ```{python}
 import scipy.cluster.hierarchy as sch
 
-linkage_matrix = sch.linkage(hspc_var, method='ward')
+linkage_matrix = sch.linkage(hspc_zs, method='ward',metric='euclidean')
 
 # Create the dendrogram
 plt.figure(figsize=(10, 6))
@@ -892,4 +892,288 @@ plt.show()
 
 
 #lo = sch.dendrogram(linkage_matrix)
+```
+
+```{python}
+import scipy.spatial.distance as ssd
+dist_matrix = ssd.pdist(hspc_var, metric='correlation')
+
+# Step 2: Hierarchical clustering (like R's hclust)
+linkage_matrix = sch.linkage(dist_matrix, method='ward')  # or "ward", "average", etc.
+
+# Step 3: Plot dendrogram (like R's plot)
+plt.figure(figsize=(10, 6))
+sch.dendrogram(linkage_matrix, labels=hspc_zs.index.tolist(), leaf_rotation=90)
+plt.title("Hierarchical Clustering of Genes")
+plt.xlabel("Genes")
+plt.ylabel("Distance")
+plt.tight_layout()
+plt.show()
+
+
+#lo = sch.dendrogram(linkage_matrix)
+```
+
+
+Let say we want to cluster the samples(columns) instead? What should we do?
+
+```{python}
+#| code-fold: true
+import scipy.cluster.hierarchy as sch
+
+sample_linkage_matrix = sch.linkage(hspc_zs.T, method='ward',metric='euclidean')
+
+# Create the dendrogram
+plt.figure(figsize=(10, 6))
+sch.dendrogram(sample_linkage_matrix, labels=hspc_var.T.index.tolist(), leaf_rotation=90)
+plt.title("Dendrogram of Samples (hspc_var)")
+plt.xlabel("Sample")
+plt.ylabel("Distance")
+plt.tight_layout()
+plt.show()
+
+```
+
+## Heatmaps
+
+Heatmaps have been the go-to method for visualising gene expression data. We can make one from first principles using the work we have done above. Lets take a look at the contents of what is returned by `sch.dendrogram`.
+
+Lets run these lines again, but this time saving the output from each call to cluster the data:
+
+```{python}
+gene_linkage_matrix = sch.linkage(hspc_zs, method='ward',metric='euclidean')
+genes_hc = sch.dendrogram(gene_linkage_matrix, labels=hspc_var.index.tolist(),no_plot=True)#, leaf_rotation=90)
+
+sample_linkage_matrix = sch.linkage(hspc_zs.T, method='ward',metric='euclidean')
+samples_hc = sch.dendrogram(sample_linkage_matrix, labels=hspc_var.T.index.tolist(),no_plot=True)#, leaf_rotation=90)
+```
+
+***Exercise**: What kind of object is `genes_hc`? Check it, and then get a list of what `genes_hc` contains.
+
+```{python}
+#| code-fold: true
+type(genes_hc)
+genes_hc.keys()
+```
+
+At th
+
+```{python}
+plt.imshow(hspc_zs, aspect='auto', cmap='viridis')
+plt.show()
+```
+
+We can how ordered the rows according to `ivl`
+
+```{python}
+hspc_ordered = hspc_zs.loc[genes_hc["ivl"]]
+```
+
+Replot the heatmap:
+```{python}
+plt.imshow(hspc_ordered, aspect='auto', cmap='viridis')
+plt.show()
+```
+
+Looking better right? One more step and we will have clustered columns:
+
+```{python}
+hspc_ordered = hspc_zs.loc[genes_hc["ivl"],samples_hc["ivl"]]
+```
+
+And plot again:
+
+```{python}
+plt.imshow(hspc_ordered, aspect='auto', cmap='viridis')
+plt.show()
+```
+
+To make a heatap using `seaborn`:
+
+```{python}
+import seaborn as sns
+
+sns.heatmap(hspc_ordered, cmap='magma')  # Optional: cbar=True, xticklabels=False, yticklabels=False
+plt.title('Heatmap of Data')
+plt.show()
+```
+
+We can do a lot of this in one shot using the `clustermap function` where the clustering and plotting is done in one go:
+
+```{python}
+sns.clustermap(hspc_var, method='ward', metric='euclidean', cmap='magma', z_score=0)
+plt.show()
+```
+
+To save the plot do:
+
+```{python}
+hspc_clus = sns.clustermap(hspc_var, method='ward', metric='euclidean', cmap='magma', z_score=0)
+hspc_clus.fig.savefig("clustermap.png")
+```
+
+We can see from the heatmap that he genes *broadly* fall into 5 clusters, and it would be good to know which genes are in which cluster. To do this we need to probe the output of `hspc_clus` to get to that information.
+
+```{python}
+dir(hspc_clus)
+gene_clusters_k5 = sch.fcluster(hspc_clus.dendrogram_row.linkage,t=5, criterion='maxclust')
+```
+
+Now we have an array of cluster assignments, we can add this as a colour bar:
+```{python}
+row_colors = pd.Series(gene_clusters_k5, index=hspc_var.index, name="cluster")
+unique_clusters = sorted(row_colors.unique())
+palette = sns.color_palette("tab10", n_colors=len(unique_clusters))
+lut = dict(zip(unique_clusters, palette))
+row_colors_mapped = row_colors.map(lut)
+```
+
+```{python}
+sns.clustermap(
+    hspc_var,
+    method='ward',
+    metric='euclidean',
+    cmap='magma',
+    z_score=0,
+    row_colors=row_colors_mapped
+)
+plt.show()
+```
+
+
+We can also count up how many genes we have in each cluster:
+
+```{python}
+counts= pd.Series(gene_clusters_k5).value_counts().sort_index()
+```
+
+```{python}
+counts.plot(kind='bar')
+plt.show()
+```
+
+
+# Linear models
+Fitting a linear model (or linear regression) is also another fairly common thing to do, and actually forms the basis of some of the more famous packages we use such as DESeq2, limma etc. Let’s use our expression data to demonstrate this.
+
+In our case we have 3 different samples:
+
+```{python}
+hspc_data.columns
+```
+
+But what we need to do is make a vector where the `.X` has been clipped off to make a vector of three groups. We do this by:
+
+```{python}
+groups = pd.Series(hspc_data.columns).str.replace(r"\..*", "", regex=True)
+print(groups.tolist())  # ['stem', 'stem', 'prog', 'prog']
+```
+
+We can now make a linear model for the first gene from this array of groups:
+
+```{python}
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+df = pd.DataFrame({
+    'expression': hspc_data.iloc[0].values,
+    'group': groups.values
+})
+
+# 2. Fit the model
+model = smf.ols('expression ~ group', data=df).fit()
+```
+
+...and run the ANOVA:
+
+```{python}
+anova_table = sm.stats.anova_lm(model, typ=2)
+print(anova_table)
+```
+
+
+```{python}
+p_value = anova_table["PR(>F)"]["group"]
+print(p_value)
+```
+
+***Exercise***: Make a function called do_anova which takes a vector vand a vector groups, performs linear modelling and ANOVA and returns just the p-value.
+
+
+```{python}
+
+def do_anova(vals,grps):
+    df = pd.DataFrame({
+        'expression': vals,
+        'group': grps
+        })
+    mod = smf.ols('expression ~ group', data=df).fit()
+    anova_table = sm.stats.anova_lm(mod, typ=2)
+    p_value = anova_table["PR(>F)"]["group"]
+    return p_value
+
+```
+
+```{python}
+do_anova(hspc_data.iloc[0].values,groups)
+```
+
+We can now apply this to all rows of our data in one shot!
+
+```{python}
+hspc_pvals = hspc_data.apply(lambda row: do_anova(row.values, groups), axis=1)
+```
+
+We need to correct the p-values! We usually do this using Benjamini-Hochberg correction:
+
+```{python}
+import scipy.stats as ss
+
+hspc_pcor = ss.false_discovery_control(hspc_pvals)
+p_cors_df = pd.DataFrame({
+        'pvals': hspc_pcor,
+        })
+p_cors_df.index = hspc_data.index
+```
+
+Then we can pull out the significant genes using a conditional:
+
+```{python}
+sig_genes = p_cors_df.index[p_cors_df['pvals'] < 0.001]
+```
+
+Get the genes from the main matrix:
+
+```{python}
+sig_data = hspc_data.loc[sig_genes]
+```
+
+And heatmap them!
+```{python}
+sns.clustermap(
+    sig_data,
+    method='ward',
+    metric='euclidean',
+    cmap='magma',
+    z_score=0)
+plt.show()
+
+```
+
+
+# Kmeans
+We’re going to program our first algorithm together! Kmeans clustering is a common way to cluster expression data, and the algorithm is actually pretty simple, and a great way to learn how to think programmatically. The data we’ll use comes from yeast where the expression of 256 genes have been measured as a synchronised population go through two divisions. It’s a nice small dataset with clear clusters.
+
+There is a file called “Spellman_Yeast_Cell_Cycle.tsv” (https://github.com/shambam/R_programming_1/blob/main/Spellman_Yeast_Cell_Cycle.tsv). Load it into a variable called `ycc`.
+
+
+```{python}
+ycc = pd.read_csv("Spellman_Yeast_Cell_Cycle.tsv", sep="\t", header=0, index_col=0)
+ycc_np = ycc.values
+```
+
+```{python}
+
+ran = np.random.choice(np.arange(6), size=150, replace=True)
+
 ```
