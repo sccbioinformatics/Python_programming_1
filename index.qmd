@@ -18,6 +18,9 @@ Python is a high-level **general** programming language (unlike R which has a fo
 
 [R](https://cran.r-project.org) of course which has a long rich history in boinformatics, and most will have heard of [Bioconductor](https://www.bioconductor.org) which is a collection of packages to anaylse biological and genomics data. For very computationally intensive tasks (e.g sequence alignment), languages such as C/C++/Rust are more commonly used, but these are far more difficult to learn.
 
+## A small warning
+If you have knowledge of R, this course may be a bit frustrating as some things in Python take more effort to do. R is really geared up as a language for maths and stats, so many useful functions are build into the base language. Python is a **general** programming language, so functions that are native to R will need to be located in Python packages.
+
 ## How will this course work?
 
 We're going to take a different approach to this course. You will be taught the basics of the Python language while doing small exercises along the way. However, we will finish by you undertaking a project which will push you quite hard. The aim is that by tacking a more difficult problem will consolidate what you have learnt, and learn more by having to look up solutions to the problems you will likely face.
@@ -501,7 +504,7 @@ hspc_data.shape[1]
 Lets take a look at the column names and see what they look like:
 
 ```{python}
-list(hspc_data.columns)
+list(hspc_data.columns)[1:10]
 ```
 
 It's quite common that we need to break a table up. In this case, we want to separate the different populations into dataframes called `lthsc`,`mep`, and `gmp`.
@@ -1164,7 +1167,7 @@ plt.show()
 # Kmeans
 We’re going to program our first algorithm together! Kmeans clustering is a common way to cluster expression data, and the algorithm is actually pretty simple, and a great way to learn how to think programmatically. The data we’ll use comes from yeast where the expression of 256 genes have been measured as a synchronised population go through two divisions. It’s a nice small dataset with clear clusters.
 
-There is a file called “Spellman_Yeast_Cell_Cycle.tsv” (https://github.com/shambam/R_programming_1/blob/main/Spellman_Yeast_Cell_Cycle.tsv). Load it into a variable called `ycc`.
+There is a file called [Spellman_Yeast_Cell_Cycle.tsv](https://github.com/shambam/R_programming_1/blob/main/Spellman_Yeast_Cell_Cycle.tsv). Load it into an object called `ycc`.
 
 
 ```{python}
@@ -1172,8 +1175,201 @@ ycc = pd.read_csv("Spellman_Yeast_Cell_Cycle.tsv", sep="\t", header=0, index_col
 ycc_np = ycc.values
 ```
 
-```{python}
 
+
+
+
+
+```{python}
 ran = np.random.choice(np.arange(6), size=150, replace=True)
+```
+
+The data has already been z-scored, so we need to learn how to calculate the Euclidean distance between 2 genes ($g^{i}$ and $g^{j}$) (vector). We do this using the formula:
+
+$$d_{ij}=\sqrt{\sum{(g^{i}_t-g^{j}_t)^2}}$$
+
+Write a function called `e_dist` which takes two vectors `v1` and `v2` and calculates the distance between them. In our data, these two vectors (`v1` and `v2`) are the different expression values of two genes through the different time points measured in the yeast cell cycle .
+
+```{python}
+#| code-fold: true
+import math
+
+def e_dist(v1,v2):
+    d = math.sqrt(pow(sum((v1-v2)),2))
+    return d
+```
+
+
+The kmeans algorithm needs the user to say how many clusters are being searched for, so in this case we’ll say **8**.
+
+1. Pick 8 genes (rows) at random to act as our initial centroids.
+2. Calculate the distance between each gene to each of the 8 centroids.
+3. Assign each gene to its closest centroid.
+4. For each of the 8 clusters, calculate a new centroid.
+5. Repeat 100 times steps 2, 3, and 4.
+6. We’ll now work through this problem together and crowd source a solution.
+
+```{python}
+#| code-fold: true
+K=8
+iter=100
+
+ran = np.random.choice(np.arange(ycc_np.shape[0]), size=8, replace=False)
+print(ran)
+
+centroids = ycc_np[ran,:]
+
+centroids
+
+clusters=None
+
+dists = np.zeros((ycc_np.shape[0],K))
+
+for i in range(iter):
+
+    for gene in range(ycc_np.shape[0]):
+
+        for k in range(K):
+
+            dists[gene,k] = e_dist(ycc_np[gene,:],centroids[k,:])
+
+    clusters = np.argmin(dists, axis=1)
+
+    for nc in range(K):
+        centroids[nc,:] = np.mean(ycc_np[clusters==nc,:],axis=0)
 
 ```
+
+```{python}
+
+fig, axes = plt.subplots(2, 4, figsize=(16, 8))
+axes = axes.flatten()
+
+for k in range(8):
+    ax = axes[k]
+    
+    ycc_c = ycc_np[clusters == k, :]  # rows in cluster k
+    if ycc_c.shape[0] == 0:
+        continue  # skip if no rows
+    
+    # Plot the first row
+    ax.plot(ycc_c[0], color='black', alpha=0.5)
+    
+    # Overlay the rest
+    for i in range(ycc_c.shape[0]):
+        ax.plot(ycc_c[i], color='black', alpha=0.3)
+
+    ax.set_title(f"Cluster {k}")
+    ax.set_ylim(ycc_np.min(), ycc_np.max())
+
+plt.tight_layout()
+plt.show()
+
+```
+
+
+```{python}
+# Assume ycc and clusters already exist
+n_samples, n_timepoints = ycc.shape
+timepoints = np.arange(n_timepoints)
+
+# Create a DataFrame from ycc
+ycc_df = pd.DataFrame(ycc)
+ycc_df['cluster'] = clusters
+
+# Melt the DataFrame to long format
+long_df = ycc_df.reset_index().melt(id_vars=['index', 'cluster'], 
+                                    var_name='time', value_name='value')
+long_df.rename(columns={'index': 'sample'}, inplace=True)
+long_df['time'] = long_df['time'].str.extract(r'(\d+)').astype(int) # make sure time is numeric
+
+# Plot with seaborn FacetGrid
+g = sns.FacetGrid(long_df, col='cluster', col_wrap=4, sharey=True, height=3)
+g.map_dataframe(sns.lineplot, x='time', y='value', alpha=0.3, legend=False)
+
+g.set_titles("Cluster {col_name}")
+g.set_axis_labels("Time", "Value")
+plt.tight_layout()
+plt.show()
+
+```
+
+# The Final Project
+
+Your final project is going to combine everything you have learned over the last few days to tackle a final project you will do in your own time over the next X weeks. It will be along the same lines the Kmeans clustering we just did, but this time we're going to cluster the data using the Metropolis-Hastings algorithm. This is a simulated annealing process, so we need to learn how that works first.
+
+## Optimisation problems
+
+Programming an optimisation problem is a great way of learning how to code. In this case we are going to tackle a minimisation problem. We can think of well clustered data having low energy, in that, each cluster is tight and has little within cluster variance. If we calculate the variance *within* each cluster, and sum over all clusters, we get the total variance (energy) of the system. Lets go back to the equation we know that measures the distance between two genes $i$ and $j$ over $t$ timepoints:
+
+$$d_{ij}=\sqrt{\sum{(g^{i}_t-g^{j}_t)^2}}$$
+
+To measure the compactness of a clustering, we sum the pairwise distances for each cluster $K$, then sum over all $K$s and them divide by $K$.
+
+$$ E(K)=\frac{1}{K}\sum^K_{k=1} \left[ \sum_{i\epsilon Ck}\sum_{j\epsilon Ck} d_{ij}\right] $$
+
+For a well clustered data, $E(K)$ should be as **small** as possible. Lets say we have 1000 genes, and we want to partition them into 10 clusters. The number of combinations is too high for us to try each one to brute force a true $E$. This is why we use a *heuristic* algorithm to get us as close to the solution as possible in a smaller amount of time.
+
+If we tried to visualise the energy landscape we can imagine it might look something like this:
+
+
+![Energy](images/EnergyLandscape.png){width=600}
+
+
+**The first thing you need to do is rescale each gene (row) of the data so the smallest value is given 0, and the highest value is given 1.**
+
+Lets go through the process of the algorithm. To do this you need 4 parameters:
+
+1. The temperature of the system $Temp$
+2. Cooling factor $cool$
+3. Number of clusters $K$
+4. How many iterations to perform $I$.
+
+
+Algorithm goes:
+
+&nbsp;&nbsp;&nbsp;&nbsp;Randomly assign each gene to one of your K clusters.
+
+for each iteration $I$ {
+
+&nbsp;&nbsp;&nbsp;&nbsp;Calculate $E$. Call this $E_{old}$
+    
+&nbsp;&nbsp;&nbsp;&nbsp;Randomly select a single gene and assign it randomly to another cluster.
+  
+&nbsp;&nbsp;&nbsp;&nbsp;Calculate $E_{new}$
+    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if($E_{new}$ < $E_{old}$) {accept the move}
+    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if($E_{new} > E_{old})$ {if($e^{-\frac{E_{new}-E_{old}}{Temp}} > R(0,1)$) {accept the move} }
+        
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else{reject the move}
+  
+&nbsp;&nbsp;&nbsp;&nbsp;Set a new $Temp$ by doing $Temp=Temp \times cool$
+}
+
+Done
+
+$R(0,1)$ is a randomly generated number from a uniform distribution that lies between 0 and 1.
+
+
+***Things to do***
+
+1. Code this algorithm using the same yeast timecourse data.
+2. Put this algorithm into a function.
+3. When running the function, make sure the starting $E_{start}$ and final $E_{final}$ are printed to the screen.
+
+***Tip***
+
+Try and break the problem up into functions which can be called when needed. It will be easier to write the main algorithm.
+
+***Why this exercise is a good one***
+
+By tackling a more difficult problem the idea is that you will dig deeper into the language and really understand how things work in the background of the functions you use in packages such as Seurat etc.
+
+***Are there libraries in Python to do this?***
+
+Yes there are, but you won't learn anything by using them which is why we are coding this "by hand".
+
+***A little inspiration***
+
+Before you start, read [this](https://www.newyorker.com/magazine/2018/12/10/the-friendship-that-made-google-huge), and then watch [this](https://youtu.be/USC6c9Dtak8).
