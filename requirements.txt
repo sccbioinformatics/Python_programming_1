@@ -1,0 +1,10 @@
+mkdocs
+mkdocs-material
+pymdown-extensions
+numpy
+pandas
+matplotlib
+seaborn
+scipy
+statsmodels
+scikit-learn

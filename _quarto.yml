@@ -1,6 +1,6 @@
 project:
   type: website
-jupyter: quarto.env
+jupyter: python3
 
 website:
   title: "Python programming I"
@@ -8,6 +8,36 @@ website:
     left:
       - href: index.qmd
         text: Home
+      - href: 02-basics.qmd
+        text: Basics
+      - href: 03-numpy.qmd
+        text: NumPy
+      - href: 04-plotting.qmd
+        text: Plotting
+      - href: 05-dataframes.qmd
+        text: DataFrames
+      - href: 06-subsetting.qmd
+        text: Subsetting
+      - href: 07-dicts.qmd
+        text: Dicts
+      - href: 08-io.qmd
+        text: IO
+      - href: 09-flow.qmd
+        text: Flow
+      - href: 10-functions.qmd
+        text: Functions
+      - href: 11-performance.qmd
+        text: Performance
+      - href: 12-variable-genes.qmd
+        text: Variable genes
+      - href: 13-clustering.qmd
+        text: Clustering
+      - href: 14-linear-models.qmd
+        text: Linear models
+      - href: 15-kmeans-project.qmd
+        text: K-means + project
+      - href: 16-Simulated_annealing_final_project_introduction.qmd
+        text: Annealing intro
 
 format:
   html:
