@@ -24,12 +24,13 @@ Install Miniconda from the official instructions:
 
 - Miniconda download + install guide: https://www.anaconda.com/docs/getting-started/miniconda/main
 
+After installation, open a terminal.
+
 **Hint** On windows the easiest is to using winget on the command line:
 - Open a terminal and install using ``winget install Miniconda3 Python.Python.3.10 ``
+- Open a new Terminal
+- In the new terminal make conda available with ``& "$HOME\miniconda3\shell\condabin\conda-hook.ps1"``
 
-
-
-After installation, open a terminal.
 
 ---
 
@@ -39,12 +40,6 @@ Create an environment (one time):
 
 ```bash
 conda create -n quarto.env python=3.10
-```
-
-**Windows**
-```
-cd ~
- .\miniconda3\_conda.exe create -n quarto.env python=3.10
 ```
 
 Activate it:
@@ -64,9 +59,8 @@ conda activate quarto.env
 # Install the packages we’ll use
 
 ```bash
-conda install -c conda-forge \
-  jupyterlab notebook nbclient ipykernel \
-  numpy pandas matplotlib seaborn scipy statsmodels scikit-learn
+pip install -c jupyterlab notebook nbclient ipykernel
+pip install -c numpy pandas matplotlib seaborn scipy statsmodels scikit-learn
 ```
 
 Notes:
@@ -78,21 +72,9 @@ Notes:
 
 ---
 
-# Register the environment as a Jupyter kernel
+# Start Jupter Lab
 
-This makes the environment appear inside Jupyter as a selectable “kernel”:
-
-```bash
-python -m ipykernel install --user --name quarto-env --display-name "Python (quarto.env)"
-```
-
-**Important:** the kernel name here is `quarto-env`. We’ll match this to your `_quarto.yml` later.
-
----
-
-# Start JupyterLab
-
-Run:
+From within the environment you now can start the Jupyter server:
 
 ```bash
 jupyter lab

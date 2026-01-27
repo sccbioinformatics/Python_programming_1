@@ -128,7 +128,7 @@ def animal_maths(value1, value2, animal="pig"):
 
     if animal not in operations:
         ## be kind and also state what you would expect here!
-        raise ValueError(f"Unknown animal: '{animal}'' I only know about {join(operations.keys())}")
+        raise ValueError(f"Unknown animal: '{animal}'' I only know about {operations.keys()}")
 
     return operations[animal](value1, value2)
 ```
