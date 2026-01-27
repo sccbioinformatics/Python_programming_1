@@ -27,9 +27,10 @@ Install Miniconda from the official instructions:
 After installation, open a terminal.
 
 **Hint** On windows the easiest is to using winget on the command line:
-- Open a terminal and install using ``winget install Miniconda3 Python.Python.3.10 ``
-- Open a new Terminal
-- In the new terminal make conda available with ``& "$HOME\miniconda3\shell\condabin\conda-hook.ps1"``
+
+ - Open a terminal and install using ``winget install Miniconda3 Python.Python.3.10 ``
+ - Open a new Terminal
+ - In the new terminal make conda available with ``& "$HOME\miniconda3\shell\condabin\conda-hook.ps1"``
 
 
 ---
