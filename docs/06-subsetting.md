@@ -31,8 +31,9 @@ m = np.arange(1, 51).reshape((10, 5))
 
 df = pd.DataFrame(
     m,
-    index=["A","B","C","D","E","F","G","H","I","J"],
-    columns=["cat", "dog", "pig", "cow", "chicken"]
+    index=["GATA1", "SPI1", "RUNX1", "CEBPA", "TAL1",
+         "MPO", "KIT", "CD34", "LYZ", "IL7R"],
+    columns=["LTHSC_1", "LTHSC_2", "MEP_1", "MEP_2", "GMP_1"]
 )
 
 df
@@ -62,7 +63,7 @@ Specific elements:
 df.iloc[2, 3]
 ```
 
-Slice rows 3 to 7 (7 is excluded):
+Slice rows 3 to 8 (8 is excluded):
 
 ```python
 df.iloc[2:7, :]

@@ -136,7 +136,7 @@ df2 = pd.DataFrame(
     index=genes,
     columns=samples
 )
-print(df)
+print(df2)
 ```
 ---
 

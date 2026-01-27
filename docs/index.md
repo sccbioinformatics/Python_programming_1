@@ -24,6 +24,11 @@ Install Miniconda from the official instructions:
 
 - Miniconda download + install guide: https://www.anaconda.com/docs/getting-started/miniconda/main
 
+**Hint** On windows the easiest is to using winget on the command line:
+- Open a terminal and install using ``winget install Miniconda3 Python.Python.3.10 ``
+
+
+
 After installation, open a terminal.
 
 ---
@@ -34,6 +39,12 @@ Create an environment (one time):
 
 ```bash
 conda create -n quarto.env python=3.10
+```
+
+**Windows**
+```
+cd ~
+ .\miniconda3\_conda.exe create -n quarto.env python=3.10
 ```
 
 Activate it:
