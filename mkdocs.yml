@@ -18,6 +18,7 @@ nav:
   - Linear models: 14-linear-models.md
   - K-means + project: 15-kmeans-project.md
 markdown_extensions:
+  - pymdownx.details
   - pymdownx.superfences
   - pymdownx.arithmatex:
       generic: true

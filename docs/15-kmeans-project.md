@@ -134,11 +134,107 @@ plt.show()
 
 # Exercise (k-means)
 
-1. Change K to 6 and re-run the clustering. How do the patterns change?
-2. Change `random_state` and re-run. Do you get the same clusters?
-3. Why do you think k-means can give slightly different results with different random starts?
+Here we try to replicate what scipy does internally using simple Python.
 
+1. Choose K initial centroids (import random)
+2. Assign each gene to the closest centroid
+3. Update centroids as the mean of assigned genes
+4. Repeat until stable
+
+The most important calculation will be the eucledian distance.
+Implement your own ``dist( vec1, vec2)`` function.
+
+??? You can compare yours to this after you are finished
+
+```python
+def dist(vec1, vec2):
+    """
+    Calculates a single gene <-> gene or gene <-> centroid eucledian distance
+    """
+    diff = vec1 - vec2
+    return np.sum(diff**2) ** 0.5
+```
+
+We need to repeatetly get the eucledian distances of one centroid against all genes.
+Implement a ``dist_to_centroid (centroid, mat )`` function.
+
+??? Again only peak after you finished yours
+```python
+def dist_to_centroid (centroid, mat ):
+    """
+    Calculates eucledian distance between one centroid and a matrix of genes
+    """"
+    dists = []
+    for i in range(mat.shape[0]):
+        dists.append( dist( centroid, mat[i] ) )
+    return dists
+```
+
+And finally we need to get randomness into our scripts.
+For this you normall use a random number generator and as we are already using numpy we should probably take the one from there:
+
+```python
+rng = np.random.default_rng(seed)
+```
+
+With this module we can then e.g. identify a random set of k ids from a range of n ids:
+
+```python
+idx = rng.choice(np.arange(1,11), size=k, replace=False)
+```
+
+And the loop should contain these steps:
+ 1. identify k random genes and use them as initial centromers
+ 2. compare each centromer to each gene and find for each gene the closest centromer
+ 3. recalculate the new centromers as the mean of the closest genes
+ 4. if the new centroids look like the old ones - break the loop
+ 5. use the new centroids and restart the loop
 ---
+
+??? Really - do not peak - use this opportunity to dig into this problem!
+```python
+def kmeans( data, k, maxiter, seed):
+    """
+    Clusters rows using the kmeans algorithm
+    """
+    data_np = np.asarray(data)
+    ## define a reproducible 'random' state and get the initial centroids as random genes
+    rng = np.random.default_rng(seed)
+    idx = rng.choice(np.arange(len(data_np)), size=k, replace=False)
+    centroids = data_np[idx]
+
+    ## the main loop
+    n = len(data_np)
+    for it in range(maxiter):
+        # 1) Distance table D: rows=genes, cols=centroids
+        D = np.zeros((n, k), dtype=float)
+        for c in range(k):
+            dists = dist_to_centroid(centroids[c], data_np)
+            for i in range(n):
+                D[i, c] = dists[i]
+
+        # 2) Assign each gene to nearest centroid
+        labels = np.zeros(n, dtype=int)
+        for i in range(n):
+            labels[i] = int(np.argmin(D[i, :]))
+
+        # 3) Update centroids (mean of assigned points)
+        new_centroids = centroids.copy()
+        for c in range(k):
+            members = data_np[labels == c]
+            if len(members) > 0:                # avoid empty cluster crash
+                new_centroids[c] = np.mean(members, axis=0)
+            else:
+                # re-seed empty centroid to a random point (simple, explicit)
+                new_centroids[c] = data_np[rng.integers(0, n)]
+
+        # 4) Stop if centroids no longer move
+        if np.allclose(new_centroids, centroids):
+            break
+        centroids = new_centroids
+
+    return labels, centroids, D
+```
 
 # The Final Project: Simulated annealing clustering
 
