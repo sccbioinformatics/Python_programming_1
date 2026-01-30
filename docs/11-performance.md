@@ -45,25 +45,42 @@ def timed(func, *args, **kwargs):
 
 # A slow approach: looping over rows
 
-This function computes row means and variances using a loop.
+This function computes the eucledian distance for two arrays.
 
 ```python
-def calc_mean_and_var_slow(mat):
-    means = []
-    variances = []
+import math
 
-    for i in range(mat.shape[0]):
-        row = mat.iloc[i, :]
-        means.append(np.mean(row))
-        variances.append(np.var(row, ddof=1))
+def euclid_distance_by_hand(v1, v2):
+    if len(v1) != len(v2):
+        raise ValueError(f"Length mismatch: {len(v1)} != {len(v2)}")
 
-    return {"means": means, "variances": variances}
+    s = 0.0
+    for k in range(len(v1)):
+        diff = float(v1[k]) - float(v2[k])
+        s += diff * diff
+
+    return math.sqrt(s)
+
+
+def distance_matrix_df(df, func):
+    X = np.asarray(df)
+    names = df.index
+    n = X.shape[0]
+
+    D = np.zeros((n, n))
+
+    for i in range(n):
+        for j in range(i,n):
+            D[i, j] = func(X[i], X[j])
+            D[j, i] = D[i, j]
+
+    return pd.DataFrame(D, index=names, columns=names)
 ```
 
 Time it:
 
 ```python
-(_, t_slow) = timed(calc_mean_and_var_slow, gmp_data)
+(_, t_slow) = timed(distance_matrix_df, hspc_data.iloc[range(200)], euclid_distance_by_hand )# first 200 genes of the whole data only
 print("slow:", t_slow)
 ```
 
@@ -74,23 +91,48 @@ print("slow:", t_slow)
 Pandas can do these operations in compiled code (fast).
 
 ```python
-def calc_mean_and_var_fast(mat):
-    return {
-        "means": mat.mean(axis=1),
-        "variances": mat.var(axis=1, ddof=1)
-    }
+def euclid_distance_vec(v1, v2):
+    v1 = np.asarray(v1, dtype=float)
+    v2 = np.asarray(v2, dtype=float)
+
+    return np.sqrt(np.sum((v1 - v2) ** 2))
+
 ```
 
 Time it:
 
 ```python
-(_, t_fast) = timed(calc_mean_and_var_fast, gmp_data)
-print("fast:", t_fast)
+(_, t_faster) = timed(distance_matrix_df, hspc_data.iloc[range(200)], euclid_distance_vec )
+print("faster:", t_faster)
 ```
 
 You should usually see a big speedup.
 
 ---
+
+But there are also specialized function that operate on the full matrix:
+
+```python
+from scipy.spatial.distance import pdist, squareform
+
+def vectorized_dist_mat(mat):
+    """
+    mat: pandas DataFrame or numpy array (rows = observations, cols = features)
+    returns: full (n x n) Euclidean distance matrix as numpy array
+    """
+    X = np.asarray(mat, dtype=float)
+
+    # upper triangle (condensed form)
+    upper = pdist(X, metric="euclidean")
+
+    # convert to full symmetric matrix
+    D = squareform(upper)
+
+    return D
+```
+
+I am sure by now you can check the run time without my help.
+
 
 # The key lesson
 
@@ -99,6 +141,8 @@ For numerical work:
 ✅ Prefer **built-in** pandas/NumPy methods  
 ❌ Avoid Python loops over rows/columns
 
+If not 100% sure you know all about the possible libraries you could use I recommend asking an AI tool for the max speed up in your function.
+
 ---
 
 # What about pandas apply?
@@ -106,45 +150,34 @@ For numerical work:
 In R, `apply()` can be a speed trick.  
 In Python, `DataFrame.apply()` usually still runs a Python function once per row/column.
 
-That means it often behaves like a loop (and can be slow).
-
-Example task:
-
-﻿For each row, compute:
-
-```
-(mean * std) / sum
-```
-
----
-
-# Fast (vectorized) solution
+That means it often behaves like a loop (and can be slow). But eucledian distance is probably the worst example for apply as it works on one row/column only.
+So for this we switch to a simple mean calculation.
 
 ```python
-means = hspc_data.mean(axis=1)
-stds  = hspc_data.std(axis=1, ddof=1)
-sums  = hspc_data.sum(axis=1)
-
-result_vectorized = (means * stds) / sums
+def mean_vec(vec1):
+    return vec1.mean() # very fast here
 ```
 
-Time it:
-
 ```python
-(_, t_vec) = timed(lambda: (hspc_data.mean(axis=1) * hspc_data.std(axis=1, ddof=1)) / hspc_data.sum(axis=1))
-print("vectorized:", t_vec)
+(_, t_vec) = timed( hspc_data.apply, mean_vec , axis=1)
+print("apply time:", t_vec)
 ```
 
----
+This is rather fast, but using the inbuild pandas mean function is even faster:
 
-# Slower solution using apply
 
 ```python
-def example_func(v):
-    return (np.mean(v) * np.std(v, ddof=1)) / np.sum(v)
+(_, t_vec) = timed( hspc_data.mean,  axis=1)
+print("pandas time:", t_vec)
+```
 
-(_, t_apply) = timed(hspc_data.apply, example_func, axis=1)
-print("apply:", t_apply)
+If we would have our data as a numpy array instead we could get this even faster using numpy's vectorization:
+
+
+```python
+arr = np.array(hspc_data)
+(c, t_fast) = timed(arr.mean, axis=1 )
+print("numpy:", t_fast)
 ```
 
 ---

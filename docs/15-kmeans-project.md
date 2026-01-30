@@ -168,7 +168,7 @@ One simple idea is the average within-cluster pairwise distance.
 For clusters \(C_1, \ldots, C_K\):
 
 \[
-E = \frac{1}{K}\sum_{k=1}^{K} \left( \frac{1}{|C_k|(|C_k|-1)} \sum_{i \in C_k} \sum_{j \in C_k, j \neq i} d_{ij} \right)
+E = \frac{1}{K}\sum_{k=1}^{K} \left( \sum_{i \in C_k} \sum_{j \in C_k, j \neq i} d_{ij} \right)
 \]
 
 Lower energy means tighter clusters.
@@ -243,3 +243,12 @@ Before you start:
 - Remember: the goal is learning, not competing with libraries
 
 You now have the tools to tackle a real algorithmic problem in Python.
+Use Google, but no AI tool to learn e.g. how to accept user input in a python script.
+
+# Performance
+
+Once you have your script up and runnig and the results look accetable (plots!) and you still have some juce to program more:
+
+ 1. Store the disnatnce matrix and do nor re-calculate
+ 2. Store the per cluster energies and only re-caulaulte the ones affected by the move
+ 3. Only calculate a delta energy and not touch the stable genes in the clusters
