@@ -144,7 +144,7 @@ Here we try to replicate what scipy does internally using simple Python.
 The most important calculation will be the eucledian distance.
 Implement your own ``dist( vec1, vec2)`` function.
 
-??? You can compare yours to this after you are finished
+??? example "You can compare yours to this after you are finished"
 ```python
 def dist(vec1, vec2):
     """
@@ -157,7 +157,7 @@ def dist(vec1, vec2):
 We need to repeatetly get the eucledian distances of one centroid against all genes.
 Implement a ``dist_to_centroid (centroid, mat )`` function.
 
-??? Again only peak after you finished yours
+??? example "Again only peak after you finished yours"
 ```python
 def dist_to_centroid (centroid, mat ):
     """
@@ -190,7 +190,7 @@ And the loop should contain these steps:
  5. use the new centroids and restart the loop
 ---
 
-??? Really - do not peak - use this opportunity to dig into this problem!
+??? example "Really - do not peak - use this opportunity to dig into this problem!"
 ```python
 def kmeans( data, k, maxiter, seed):
     """
