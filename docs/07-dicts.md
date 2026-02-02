@@ -63,7 +63,8 @@ genes = {
 genes["erythroid"]
 ```
 
-This is often clearer when working with biological concepts.
+This is often clearer when working with biological data where the raw information is paired with additional metadata.
+
 
 ---
 
@@ -158,6 +159,8 @@ for key, value in experiment.items():
 ```
 
 ---
+
+Python packages like scanpy also store a lot of the informations in dictionaries. The ``uns`` slot int an anndata objects is a dictionary and containe e.g. color information for the grouping or in ``uns_m`` the neighbor information needed for the UMAP algorithm.
 
 # Exercise
 

@@ -145,7 +145,6 @@ The most important calculation will be the eucledian distance.
 Implement your own ``dist( vec1, vec2)`` function.
 
 ??? You can compare yours to this after you are finished
-
 ```python
 def dist(vec1, vec2):
     """
