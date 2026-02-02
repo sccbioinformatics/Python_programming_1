@@ -20,6 +20,7 @@ nav:
 markdown_extensions:
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.betterem
   - pymdownx.arithmatex:
       generic: true
 extra_javascript:
