@@ -21,6 +21,16 @@ Writing code that *runs* is not enough — it must also run *fast enough*.
 ```python
 import numpy as np
 import pandas as pd
+
+url = "https://raw.githubusercontent.com/shambam/R_programming_1/main/Mouse_HSPC_reduced.txt"
+hspc_data = pd.read_csv(
+    url,
+    sep="\t",
+    header=0,
+    index_col=0
+)
+
+hspc_data
 ```
 
 ---
@@ -47,6 +57,13 @@ def timed(func, *args, **kwargs):
 
 This function computes the eucledian distance for two arrays.
 
+Eucledian distance is defined like that:
+
+\[
+d_{ij} = \sqrt{\sum_t (g^i_t - g^j_t)^2}
+\]
+
+
 ```python
 import math
 
@@ -72,7 +89,7 @@ def distance_matrix_df(df, func):
     for i in range(n):
         for j in range(i,n):
             D[i, j] = func(X[i], X[j])
-            D[j, i] = D[i, j]
+            D[j, i] = D[i, j] # symmetry
 
     return pd.DataFrame(D, index=names, columns=names)
 ```

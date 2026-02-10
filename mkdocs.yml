@@ -2,21 +2,19 @@ site_name: Python programming I
 theme:
   name: material
 nav:
-  - Setup: index.md
+  - Setup: 01-intro.md
   - Basics: 02-basics.md
-  - NumPy: 03-numpy.md
-  - Plotting: 04-plotting.md
-  - DataFrames: 05-dataframes.md
-  - Subsetting: 06-subsetting.md
-  - Dicts: 07-dicts.md
+  - Plotting: 03-plotting.md
+  - DataFrames: 04-dataframes.md
+  - Dicts: 05-dicts.md
+  - Flow: 06-flow.md
+  - Functions: 07-functions.md
   - IO: 08-io.md
-  - Flow: 09-flow.md
-  - Functions: 10-functions.md
-  - Performance: 11-performance.md
-  - Variable genes: 12-variable-genes.md
-  - Clustering: 13-clustering.md
-  - Linear models: 14-linear-models.md
-  - K-means + project: 15-kmeans-project.md
+  - Performance: 09-performance.md
+  - Variable genes: 10-variable-genes.md
+  - Clustering: 11-clustering.md
+  - Linear models: 12-linear-models.md
+  - K-means + project: 13-kmeans-project.md
 markdown_extensions:
   - pymdownx.details
   - pymdownx.superfences

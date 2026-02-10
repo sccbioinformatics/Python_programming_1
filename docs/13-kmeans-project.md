@@ -145,7 +145,7 @@ The most important calculation will be the eucledian distance.
 Implement your own ``dist( vec1, vec2)`` function.
 
 ??? example "You can compare yours to this after you are finished"
-    
+
     ```python
     def dist(vec1, vec2):
         """
@@ -312,6 +312,9 @@ For iteration 1..I:
    - `exp(-(E_new - E_old)/Temp) > U(0,1)`
 5. Cool the system: `Temp = Temp * cool`
 
+What I mean here - create a script that gets these values from the user.
+You should search for how this would work.
+
 ---
 
 # Things to do (project checklist)
@@ -323,14 +326,6 @@ For iteration 1..I:
    - starting energy `E_start`
    - final energy `E_final`
 5. Plot the final clusters (like we did for k-means)
-
----
-
-# Tips
-
-- Break the problem into small functions.
-- Start with a small number of genes (e.g. first 50) to debug.
-- Only then scale up.
 
 ---
 
@@ -347,6 +342,6 @@ Use Google, but no AI tool to learn e.g. how to accept user input in a python sc
 
 Once you have your script up and runnig and the results look accetable (plots!) and you still have some juce to program more:
 
- 1. Store the disnatnce matrix and do nor re-calculate
+ 1. Store the distance matrix and do not calculate distances on every iteration
  2. Store the per cluster energies and only re-caulaulte the ones affected by the move
- 3. Only calculate a delta energy and not touch the stable genes in the clusters
+ 3. Only calculate a delta energy and not "touch" the stable genes in the clusters

@@ -70,8 +70,8 @@ This is why we use **pandas DataFrames**.
 Convert the NumPy matrix into a DataFrame with labels:
 
 ```python
-genes = ["GATA1", "SPI1", "RUNX1", "CEBPA", "TAL1",
-         "MPO", "KIT", "CD34", "LYZ", "IL7R"]
+genes = ["Gata1", "Spi1", "Runx1", "Cebpa", "Tal1",
+         "Actb", "Kit", "Cd34", "Lyz", "Il7r"]
 
 samples = ["LTHSC_1", "LTHSC_2", "MEP_1", "MEP_2", "GMP_1"]
 
@@ -106,8 +106,8 @@ This returns:
 Access them separately:
 
 ```python
-df.shape[0]  # rows
-df.shape[1]  # columns
+print( f"0 - nrow: {df.shape[0]}")  # rows
+print( f"1 - ncol: {df.shape[1]}")  # columns
 ```
 
 ---
@@ -142,11 +142,9 @@ print(df2)
 
 # Exercise
 
-1. Create a NumPy matrix with 6 rows and 4 columns filled with random numbers.
-2. Convert it into a pandas DataFrame.
-3. Give the rows biological-looking names (e.g. gene1, gene2, …).
-4. Give the columns sample names (e.g. sample1, sample2, …).
-5. Transpose the DataFrame.
+1. Plot the gene "Gata1" for the samples
+2. Color the plot by sample type
+3. 
 
 ---
 

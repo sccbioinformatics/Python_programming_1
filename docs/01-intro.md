@@ -40,19 +40,22 @@ After installation, open a terminal.
 Create an environment (one time):
 
 ```bash
-conda create -n quarto.env python=3.10
+conda create -n PythonCourse python=3.10
 ```
 
 Activate it:
 
 ```bash
-conda activate quarto.env
+conda activate PythonCourse
 ```
 
 From now on, whenever you work on this course, start by activating:
 
 ```bash
-conda activate quarto.env
+## windows only
+& "$HOME\miniconda3\shell\condabin\conda-hook.ps1"
+## all
+conda activate PythonCourse
 ```
 
 ---
@@ -60,8 +63,8 @@ conda activate quarto.env
 # Install the packages we’ll use
 
 ```bash
-pip install -c jupyterlab notebook nbclient ipykernel
-pip install -c numpy pandas matplotlib seaborn scipy statsmodels scikit-learn
+pip install  jupyterlab notebook nbclient ipykernel
+pip install  numpy pandas matplotlib seaborn scipy statsmodels scikit-learn
 ```
 
 Notes:
@@ -83,18 +86,19 @@ jupyter lab
 
 A browser window should open. Create a new notebook using the kernel:
 
-**Python (quarto.env)**
+**Python 3 (ipykernel)**
 
 ---
 
 # Choosing an editor (later)
 
-For notebooks, JupyterLab is great. For writing reusable code (scripts/packages), use an IDE:
+For notebooks / scripts, JupyterLab is great. For writing reusable packages, use an IDE:
 
 - **VS Code** (recommended): general purpose, very popular
 - **PyCharm**: powerful Python IDE, lots of features
 
-For this course: we’ll mostly use JupyterLab, and optionally VS Code later.
+For this course: we’ll mostly use JupyterLab and you can even stick to JupyterLab for the final project.
+But if you try to create a python package out of the final project (optional) I recommend you to use an IDE.
 
 ---
 
