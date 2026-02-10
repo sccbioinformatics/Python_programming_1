@@ -150,8 +150,10 @@ def vectorized_dist_mat(mat):
 
 I am sure by now you can check the run time without my help.
 
+Would it be feasable to process all 4170 rows with this fastest function?
 
-# The key lesson
+
+## The key lesson
 
 For numerical work:
 
@@ -197,6 +199,8 @@ arr = np.array(hspc_data)
 print("numpy:", t_fast)
 ```
 
+**Take Home** If numpy has a function for your problem use that!
+
 ---
 
 # Interpreting the result
@@ -224,31 +228,6 @@ But for large biological matrices (genes x samples), prefer vectorization.
 
 # Exercise
 
-1. Time these two operations on `gmp_data`:
-
-   - `calc_mean_and_var_slow(gmp_data)`
-   - `calc_mean_and_var_fast(gmp_data)`
-
-2. Write down the speedup factor:
-
-   ```python
-   t_slow / t_fast
-   ```
-
-3. Explain in one sentence why the fast method is faster.
-
----
-
-# Why this matters for bioinformatics
-
-Bioinformatics data matrices can contain:
-
-- 20,000 genes
-- 10,000+ cells or samples
-
-A slow method can take minutes or hours.  
-A vectorized method can take seconds.
-
-Understanding this difference is one of the most valuable skills in scientific programming.
+Just keep the ``timed`` function and apply it later on whenever you like ;-)
 
 In the next section, we will apply these ideas to real expression data: selecting variable genes and scaling (z-scores).

@@ -60,7 +60,7 @@ This prints numbers from 0 to 4.
 Print each gene name from the expression table:
 
 ```python
-for gene in data["expression"].index:
+for gene in data["genes"].index:
     print(gene)
 ```
 
@@ -71,7 +71,7 @@ for gene in data["expression"].index:
 Print each sample name:
 
 ```python
-for sample in data["expression"].columns:
+for sample in data["samples"].index:
     print(sample)
 ```
 
@@ -85,7 +85,7 @@ Print the first 2 gene rows (as a reminder of indexing):
 expr = data["expression"]
 
 for i in range(2):
-    print(expr.iloc[i, :])
+    print(expr[i, :])
 ```
 
 ---
@@ -128,8 +128,8 @@ expr = data["expression"]
 
 gene_means = []
 
-for gene in expr.index:
-    m = expr.loc[gene, :].mean()
+for gene in range(len(expr)):
+    m = expr[gene].mean()
     gene_means.append(m)
 
 gene_means
@@ -150,8 +150,8 @@ expr = data["expression"]
 
 sample_means = []
 
-for sample in expr.columns:
-    m = expr.loc[:, sample].mean()
+for sample in range(expr.shape[1]):
+    m = expr[:, sample].mean()
     sample_means.append(m)
 
 sample_means
