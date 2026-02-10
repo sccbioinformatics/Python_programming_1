@@ -229,48 +229,33 @@ np.std(v)
 2. Compute its mean and standard deviation.
 3. Try the same with a Python list. What happens?
 
----
-
-## Mathematical background
-
-For a vector with values:
-
-\[
-x_1, x_2, x_3, \dots, x_n
-\]
-
-### Mean
-
-The **mean** (average) is:
-
-\[
-\mu = \frac{1}{n} \sum_{i=1}^{n} x_i
-\]
-
-This means:
-- Add up all values
-- Divide by the number of values
-
----
-
-### Standard deviation
-
-The **standard deviation** measures how much the values vary around the mean.
-
-Population standard deviation:
-
-\[
-\sigma = \sqrt{
-\frac{1}{n}
-\sum_{i=1}^{n} (x_i - \mu)^2
-}
-\]
 
 Steps:
-1. Subtract the mean from each value
-2. Square the differences
-3. Compute the mean of those squared differences
-4. Take the square root
+ 1. Subtract the mean from each value
+ 2. Square the differences
+ 3. Compute the mean of those squared differences
+ 4. Take the square root
+
+
+??? exercise "Solution"
+    ```python
+    import numpy as np
+
+    # 1. Create vector
+    v = np.arange(0, 101, 10)
+    v
+
+    # 2. Mean and standard deviation
+    np.mean(v)
+    np.std(v)
+
+    # 3. Try the same with a Python list
+    lst = list(range(0, 101, 10))
+
+    # This will fail:
+    np.mean(lst)
+    np.std(lst)
+    ```
 
 ---
 
