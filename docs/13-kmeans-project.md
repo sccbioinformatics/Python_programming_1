@@ -12,9 +12,10 @@ By the end of this section you will:
 - Visualize cluster patterns
 - Start the final project: implement a clustering method using simulated annealing
 
-Important note:
-This course is about learning to think programmatically. We use library functions when they are the *right tool*,
-and we write algorithms “by hand” when it helps you learn.
+**Important note:**
+This course is about learning to think programmatically.
+For methods like simulated annealing, performance improvements usually come from **reducing the number of calculations** and updating only what is necessary, rather than using the most mathematically elegant or exact version of a distance function.
+
 
 ---
 
@@ -27,6 +28,15 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 ```
 
+**And our own functions:**
+
+```python
+import importlib
+import functions
+importlib.reload(functions)
+from functions import *
+```
+
 ---
 
 # Load the yeast cell-cycle dataset
@@ -37,7 +47,11 @@ This dataset has clear clusters, which makes it good for learning.
 ```python
 url = "https://raw.githubusercontent.com/shambam/R_programming_1/main/Spellman_Yeast_Cell_Cycle.tsv"
 ycc = pd.read_csv(url, sep="\t", index_col=0)
-ycc.head()
+print(ycc.head())
+
+## and to use our functions:
+ycc = from_pd(ycc)
+
 ```
 
 ---
@@ -47,13 +61,9 @@ ycc.head()
 We scale each gene to mean 0 and sd 1 so patterns are comparable.
 
 ```python
-def zscore_rows(mat, ddof=1):
-    m = mat.mean(axis=1)
-    s = mat.std(axis=1, ddof=ddof)
-    return mat.sub(m, axis=0).div(s, axis=0)
-
-ycc_z = zscore_rows(ycc, ddof=1)
-ycc_z.head()
+ycc_z = ycc.copy()
+zscore_rows(ycc_z)
+ycc_z['expression'].mean(), ycc_z['expression'].std()
 ```
 
 ---
@@ -83,16 +93,15 @@ from sklearn.cluster import KMeans
 
 K = 8
 km = KMeans(n_clusters=K, n_init=10, random_state=0)
-clusters = km.fit_predict(ycc_z.values)
+clusters = km.fit_predict(ycc_z['expression'])
 clusters[:10]
 ```
 
-Add cluster labels to the table:
+Add cluster labels to the dict:
 
 ```python
-ycc_with_cluster = ycc_z.copy()
-ycc_with_cluster["cluster"] = clusters
-ycc_with_cluster.head()
+ycc_z['genes']['kmeans_clusters'] = clusters
+ycc_z['genes'].head()
 ```
 
 ---
@@ -106,28 +115,76 @@ Approach:
 - optionally plot the average centroid (thicker line)
 
 ```python
-timepoints = np.arange(ycc_z.shape[1])
+import math 
 
-fig, axes = plt.subplots(2, 4, figsize=(16, 8), sharey=True)
-axes = axes.flatten()
+def plot_cluster_patterns(data, cluster_col, K=None, ncols=4, show_centroid=True):
+    """
+    Plot gene expression patterns per cluster from our data dictionary.
 
-for k in range(K):
-    ax = axes[k]
-    members = ycc_z.values[clusters == k, :]
+    Parameters
+    ----------
+    data : dict
+        Our course data dictionary (validated by `check_data_model(data)`).
+    cluster_col : str
+        Column name in `data["genes"]` that stores the cluster label per gene.
+    K : int or None
+        Number of clusters. If None, inferred as max(label)+1 (integer labels).
+    ncols : int
+        Number of subplot columns.
+    show_centroid : bool
+        If True, plot the mean curve per cluster (red line).
+    """
+    # Validate input data structure (provided elsewhere in the course)
+    check_data_model(data)
 
-    # plot individual genes
-    for i in range(members.shape[0]):
-        ax.plot(timepoints, members[i, :], color="black", alpha=0.15)
+    X = data["expression"]  # (n_genes, n_samples)
+    clusters = np.asarray(data["genes"][cluster_col].values)
 
-    # plot centroid
-    ax.plot(timepoints, km.cluster_centers_[k, :], color="red", linewidth=2)
+    # x-axis: always 0..n_samples-1
+    timepoints = np.arange(X.shape[1])
 
-    ax.set_title(f"Cluster {k} (n={members.shape[0]})")
-    ax.set_xlabel("Time")
-    ax.set_ylabel("Z-score")
+    if K is None:
+        K = int(np.max(clusters)) + 1
 
-plt.tight_layout()
-plt.show()
+    nrows = math.ceil(K / ncols)
+    fig, axes = plt.subplots(nrows, ncols, figsize=(4 * ncols, 3.2 * nrows), sharey=True)
+    axes = np.atleast_1d(axes).ravel()
+
+    for k in range(K):
+        ax = axes[k]
+        members = X[clusters == k, :]
+
+        if members.shape[0] == 0:
+            ax.set_title(f"Cluster {k} (n=0)")
+            ax.axis("off")
+            continue
+
+        # plot individual genes (faint)
+        for row in members:
+            ax.plot(timepoints, row, color="black", alpha=0.15, linewidth=1)
+
+        # plot centroid (mean)
+        if show_centroid:
+            ax.plot(timepoints, members.mean(axis=0), color="red", linewidth=2)
+
+        ax.set_title(f"Cluster {k} (n={members.shape[0]})")
+        ax.set_xlabel("Time")
+        if (k % ncols) == 0:
+            ax.set_ylabel("Z-score")
+
+    # hide unused panels
+    for j in range(K, len(axes)):
+        axes[j].axis("off")
+
+    plt.tight_layout()
+    plt.show()
+    return fig 
+```
+
+And run it like this:
+
+```python
+fig = plot_cluster_patterns( ycc_z, 'kmeans_clusters', K=K )
 ```
 
 ---
@@ -142,19 +199,6 @@ Here we try to replicate what scipy does internally using simple Python.
 4. Repeat until stable
 
 The most important calculation will be the eucledian distance.
-Implement your own ``dist( vec1, vec2)`` function.
-
-??? example "You can compare yours to this after you are finished"
-
-    ```python
-    def dist(vec1, vec2):
-        """
-        Calculates a single gene <-> gene or gene <-> centroid eucledian distance
-        """
-        diff = vec1 - vec2
-        return np.sum(diff**2) ** 0.5
-    ```
-
 We need to repeatetly get the eucledian distances of one centroid against all genes.
 Implement a ``dist_to_centroid (centroid, mat )`` function.
 
@@ -172,7 +216,7 @@ Implement a ``dist_to_centroid (centroid, mat )`` function.
         return dists
     ```
 And finally we need to get randomness into our scripts.
-For this you normall use a random number generator and as we are already using numpy we should probably take the one from there:
+For this you normall use a random number generator but as we are already using numpy we should probably take the one from there:
 
 ```python
 rng = np.random.default_rng(seed)
@@ -345,3 +389,14 @@ Once you have your script up and runnig and the results look accetable (plots!) 
  1. Store the distance matrix and do not calculate distances on every iteration
  2. Store the per cluster energies and only re-caulaulte the ones affected by the move
  3. Only calculate a delta energy and not "touch" the stable genes in the clusters
+
+
+# Outlook
+
+When you simulated annealing functionality does work - add it to your functions.py file.
+And when you still want to look into Python (great!) you could ask e.g. ChatGPT to create a python package from this function.py file.
+It should come up with a pretty advanced package structure and should walk you all the way from your functions file to a package that you can install using pip and import like any other python package!
+
+
+
+

@@ -95,7 +95,7 @@ for i in range(2):
 Print every second sample name:
 
 ```python
-samples = list(data["expression"].columns)
+samples = list(data["samples"].index)
 
 for i in range(0, len(samples), 2):
     print(samples[i])
@@ -128,7 +128,7 @@ expr = data["expression"]
 
 gene_means = []
 
-for gene in range(len(expr)):
+for gene in range(expr.shape[0]):
     m = expr[gene].mean()
     gene_means.append(m)
 
@@ -201,13 +201,15 @@ while w <= 5:
 This shows how `while` can stop early when a condition is met.
 
 ```python
+cluster1_samples = []
 i = 0
-samples = list(data["samples"].index)
 
-while i < len(samples) and data["samples"].loc[samples[i], "cluster"] != 1:
+while i+1 < len(data["samples"]):
+    if data["samples"]["cluster"].iloc[i] == 1:
+        cluster1_samples.append(data["samples"].index[i])
     i = i + 1
 
-samples[i]
+cluster1_samples
 ```
 
 ---

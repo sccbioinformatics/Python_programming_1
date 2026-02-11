@@ -52,17 +52,22 @@ So we often focus on the **top N most variable genes**.
 # Select the top variable genes
 
 ```python
-def get_top_variable_genes(mat, top_n=500):
-    variances = mat.var(axis=1, ddof=1)          # variance per row (gene)
-    top_genes = variances.nlargest(top_n).index  # gene names of the largest variances
-    return mat.loc[top_genes]
+def get_top_variable_genes(data, top_n=500):
+    mat = data['expression']
+    var = mat.var(axis=1, ddof=1)          # variance per row (gene)
+    
+    # 2) get sorted gene indices (small → large variance)
+    sorted_ids = np.argsort(var)
+
+    # return a subset (bottom top_n)
+    return subset_genes(data, sorted_ids[-top_n:])
 ```
 
 Use it:
 
 ```python
 hspc_var = get_top_variable_genes(hspc_data, top_n=500)
-hspc_var.shape
+hspc_var['expression'].shape
 ```
 
 ---
@@ -70,7 +75,7 @@ hspc_var.shape
 # Check the value range
 
 ```python
-hspc_var.values.min(), hspc_var.values.max()
+hspc_var['expression'].min(), hspc_var['expression'].max()
 ```
 
 ---
@@ -100,16 +105,17 @@ This makes genes comparable even if they have very different expression ranges.
 
 ```python
 def zscore_rows(mat):
-    m = mat.mean(axis=1)
-    s = mat.std(axis=1, ddof=1)
-    return mat.sub(m, axis=0).div(s, axis=0)
+    m = np.mean(mat, axis=1, keepdims=True)
+    s = np.std(mat, axis=1, ddof=1, keepdims=True)
+    return (mat - m) / s
 ```
 
 Run it:
 
 ```python
-hspc_zs = zscore_rows(hspc_var)
-hspc_zs.shape
+hspc_zs = hspc_data_tiny.copy()
+hspc_zs['expression'] = zscore_rows(hspc_data_tiny['expression'])
+hspc_zs['expression'].shape
 ```
 
 ---
@@ -133,10 +139,22 @@ print(hspc_zs.std(axis=1, ddof=1).head())
 
 # Visual check: boxplots before and after scaling
 
+There is a boxplot function in pandas, but our dict strores the data as numpy array.
+The easiest here is to define one more function that actually converts out dict to a pandas DatFrame - the reverse of our from_df function earlier:
+
+```python
+def expression_df(data):
+    return pd.DataFrame(
+        data["expression"],
+        columns=data["samples"].index,
+        index=data["genes"].index
+    )
+```
+
 Before:
 
 ```python
-hspc_var.boxplot(rot=90)
+expression_df(hspc_var).T.boxplot(rot=90)
 plt.title("Before scaling (raw values)")
 plt.show()
 ```
@@ -144,7 +162,7 @@ plt.show()
 After:
 
 ```python
-hspc_zs.boxplot(rot=90)
+expression_df(hspc_zs).T.boxplot(rot=90)
 plt.title("After scaling (z-scores)")
 plt.show()
 ```
@@ -153,9 +171,8 @@ plt.show()
 
 # Exercise
 
-1. Select the top 200 variable genes into `hspc_var200`.
-2. Z-score them into `hspc_zs200`.
-3. Verify that row means are ~0 and row standard deviations are ~1.
+We used ``expression_df(hspc_var).T`` there, but we likely also need a transform for our own data.
+Implement a ``def transform()`` that returns a transformed data structure. 
 
 ---
 

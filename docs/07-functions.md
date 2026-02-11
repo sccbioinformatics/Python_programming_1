@@ -84,7 +84,7 @@ def get_gene(data, gene):
     """
     if gene not in data["genes"].index:
         raise ValueError(
-            f"Unknown gene '{gene}'. Expected one of: {list(data["genes"].index)}"
+            f"Unknown gene '{gene}'. Expected one of: {list(data['genes'].index)}"
         )
 
     g_idx = data["genes"].index.get_loc(gene)
@@ -138,7 +138,7 @@ in the sample table equals `value`.
    samples_in(data, col_name, value ):
       """
       Returns a list of samples wher <column_name> equals <value>
-      """"
+      """
       samples = data["samples"]
 
       if col_name not in samples.columns:

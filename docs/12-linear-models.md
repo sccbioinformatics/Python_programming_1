@@ -30,6 +30,16 @@ import statsmodels.formula.api as smf
 from statsmodels.stats.multitest import multipletests
 ```
 
+**And our own functions:**
+
+```python
+import importlib
+import functions
+importlib.reload(functions)
+from functions import *
+```
+
+
 ---
 
 # Create a group label per sample
@@ -48,9 +58,25 @@ stem.1  stem.2  prog.1  prog.2
 we can extract group labels by removing everything after the dot.
 
 ```python
-groups = pd.Series(hspc_data.columns).str.replace(r"\..*", "", regex=True)
+groups = pd.Series(hspc_data['samples'].index).str.replace(r"\..*", "", regex=True)
 groups
 ```
+
+Here, `.str` gives access to **vectorized string operations** for every entry in the pandas Series.
+Instead of looping over each sample name, pandas applies the string method to all entries at once, which is shorter and much faster.
+
+The `replace` used here is a **pandas string method**, not the normal Python string method.
+The `.str` accessor tells pandas to apply the string operation to every element in the Series, so `str.replace` works on the whole column at once instead of a single string.
+
+A slower, manual way would be to loop over the sample names and process each string one by one:
+
+```python
+import re
+groups = [re.sub(r"\..*", "", name) for name in hspc_data['samples'].index]
+```
+
+This applies a regular expression replacement to each sample name one by one, which works the same way but is usually slower and less convenient than the vectorized pandas `.str` methods.
+
 
 ---
 
@@ -60,7 +86,7 @@ Pick a gene (first row) and build a small DataFrame for modelling:
 
 ```python
 df = pd.DataFrame({
-    "expression": hspc_data.iloc[0, :].values,
+    "expression": hspc_data['expression'][0, :],
     "group": groups.values
 })
 
@@ -129,10 +155,10 @@ anova_table
 
 you see a table like this:
 
-|           | sum_sq | df | F     | PR(>F) |
-|-----------|--------|----|-------|--------|
-| group     | 12.34  | 1  | 5.67  | 0.031  |
-| Residual  | 20.10  | 6  |       |        |
+|           |  sum_sq  | df | F     | PR(>F) |
+|-----------|----------|----|-------|--------|
+| group     | 26.44    | 2  | 1.50  | 0.227  |
+| Residual  | 1295.18  | 6  |       |        |
 
 Meaning:
 
@@ -142,6 +168,11 @@ Meaning:
 | `df`     | degrees of freedom |
 | `F`      | F-statistic (signal / noise) |
 | `PR(>F)` | p-value |
+
+
+**What does “Residual” mean?**
+`Residual` is the variation **not explained by the group labels** — the within-group scatter (noise) that remains after fitting different group means. In ANOVA, the F-statistic is essentially **explained variation (group) divided by unexplained variation (residual)**, so large residual variation makes it harder to detect real group differences.
+
 
 ---
 
@@ -165,7 +196,7 @@ It answers the question:
 
 For one gene:
 
-- small p-value (e.g. < 0.05) → gene is likely **differentially expressed**
+- small p-value (e.g. << 0.05) → gene is likely **differentially expressed**
 - large p-value → no evidence for a group difference
 
 The null hypothesis is:
@@ -210,7 +241,15 @@ This is not as easily vectorized as mean/variance because model fitting is compl
 So a row-wise loop (or `apply`) is acceptable here.
 
 ```python
-pvals = hspc_data.apply(lambda row: do_anova(row.values, groups.values), axis=1)
+data= expression_df(hspc_data)
+n_genes = data.shape[0]
+pvals = [0.0] * n_genes
+
+for i in range(n_genes):
+    vals = hspc_data.iloc[i, :].values
+    pvals[i] = do_anova(vals, groups.values)
+
+pvals = pd.Series(pvals, index=hspc_data.index)
 pvals.head()
 ```
 
@@ -228,7 +267,9 @@ pvals_df = pd.DataFrame({
     "pval": pvals.values,
     "pval_fdr": pvals_fdr,
     "significant_0_05": reject
-}, index=hspc_data.index)
+}, index=pvals.index)
+
+print(f"{sum(reject)} p values now fail to impress")
 
 pvals_df.head()
 ```
@@ -271,20 +312,9 @@ plt.show()
 # Exercise
 
 1. Change the FDR threshold until you get around 500 significant genes.
-2. Make a heatmap of significant genes for your chosen threshold.
+2. Make a heatmap of significant genes for your chosen threshold - use your own function.
+3. Create a ``run_anova`` function for our dictionary.
 
----
-
-# Performance note (important)
-
-Per-gene modelling can be slow because we fit thousands of models.
-
-Ways to speed this up (later, when you need it):
-- run on fewer genes (e.g., variable genes only)
-- parallelize across CPU cores
-- use specialized packages (e.g., limma/DESeq2 in R for count models)
-
-For this course, the goal is understanding the modelling pattern.
 
 ---
 

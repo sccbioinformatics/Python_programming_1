@@ -31,6 +31,16 @@ hspc_data = pd.read_csv(
 )
 
 hspc_data
+
+## and now force that into our data type
+def from_pd(expr):
+    genes = pd.DataFrame(index=expr.index)
+    samples = pd.DataFrame(index=expr.columns)
+    return {"expression": np.array(expr), "genes": genes, "samples": samples}
+
+hspc_data = from_pd(hspc_data )
+hspc_data
+
 ```
 
 ---
@@ -79,9 +89,9 @@ def euclid_distance_by_hand(v1, v2):
     return math.sqrt(s)
 
 
-def distance_matrix_df(df, func):
-    X = np.asarray(df)
-    names = df.index
+def distance_matrix_df(data, func):
+    X = data['expression']
+    names = data['genes'].index
     n = X.shape[0]
 
     D = np.zeros((n, n))
@@ -94,10 +104,27 @@ def distance_matrix_df(df, func):
     return pd.DataFrame(D, index=names, columns=names)
 ```
 
-Time it:
+Time it - or better time a subset of the real data:
 
 ```python
-(_, t_slow) = timed(distance_matrix_df, hspc_data.iloc[range(200)], euclid_distance_by_hand )# first 200 genes of the whole data only
+## actually first get us a subset of our data:
+def subset_genes(data, gene_idx):
+    gene_idx = np.asarray(gene_idx)
+
+    X2 = data["expression"][ gene_idx,:]
+    genes2 = data["genes"].iloc[gene_idx].copy()
+
+    # samples unchanged
+    samples2 = data["samples"].copy()
+
+    return {"expression": X2, "genes": genes2, "samples": samples2}
+hspc_data_tiny = subset_genes(  hspc_data , np.arange(200) )
+check_data_model( hspc_data_tiny )
+hspc_data_tiny.shape
+```
+
+```python
+(_, t_slow) = timed(distance_matrix_df, hspc_data_tiny, euclid_distance_by_hand )# first 200 genes of the whole data only
 print("slow:", t_slow)
 ```
 
@@ -119,7 +146,7 @@ def euclid_distance_vec(v1, v2):
 Time it:
 
 ```python
-(_, t_faster) = timed(distance_matrix_df, hspc_data.iloc[range(200)], euclid_distance_vec )
+(_, t_faster) = timed(distance_matrix_df, hspc_data_tiny , euclid_distance_vec )
 print("faster:", t_faster)
 ```
 
@@ -132,15 +159,13 @@ But there are also specialized function that operate on the full matrix:
 ```python
 from scipy.spatial.distance import pdist, squareform
 
-def vectorized_dist_mat(mat):
+def vectorized_dist(data):
     """
-    mat: pandas DataFrame or numpy array (rows = observations, cols = features)
-    returns: full (n x n) Euclidean distance matrix as numpy array
+    data: a dist with "expression" - a numpy array (rows = features, cols = observations)
+    returns: full (nrow x nrow) Euclidean distance matrix as numpy array
     """
-    X = np.asarray(mat, dtype=float)
-
     # upper triangle (condensed form)
-    upper = pdist(X, metric="euclidean")
+    upper = pdist(data['expression'], metric="euclidean")
 
     # convert to full symmetric matrix
     D = squareform(upper)
@@ -164,70 +189,25 @@ If not 100% sure you know all about the possible libraries you could use I recom
 
 ---
 
-# What about pandas apply?
-
-In R, `apply()` can be a speed trick.  
-In Python, `DataFrame.apply()` usually still runs a Python function once per row/column.
-
-That means it often behaves like a loop (and can be slow). But eucledian distance is probably the worst example for apply as it works on one row/column only.
-So for this we switch to a simple mean calculation.
-
-```python
-def mean_vec(vec1):
-    return vec1.mean() # very fast here
-```
-
-```python
-(_, t_vec) = timed( hspc_data.apply, mean_vec , axis=1)
-print("apply time:", t_vec)
-```
-
-This is rather fast, but using the inbuild pandas mean function is even faster:
-
-
-```python
-(_, t_vec) = timed( hspc_data.mean,  axis=1)
-print("pandas time:", t_vec)
-```
-
-If we would have our data as a numpy array instead we could get this even faster using numpy's vectorization:
-
-
-```python
-arr = np.array(hspc_data)
-(c, t_fast) = timed(arr.mean, axis=1 )
-print("numpy:", t_fast)
-```
-
-**Take Home** If numpy has a function for your problem use that!
-
----
 
 # Interpreting the result
 
 Usually:
 
 - vectorized version is very fast
-- apply is much slower
+- pure python as well as manual for loops are much slower
 
-Why? Because `apply` calls Python code repeatedly.
+Why? Because even a for loop calls Python code repeatedly whereas the vectorized function (c or fortran) works on one big memory block.
 
----
-
-# When is apply OK?
-
-`apply` can be reasonable when:
-
-- there is no clean vectorized solution
-- the dataset is small
-- readability matters more than speed
-
-But for large biological matrices (genes x samples), prefer vectorization.
 
 ---
 
 # Exercise
 
-Just keep the ``timed`` function and apply it later on whenever you like ;-)
+Take the function ``zscore_rows`` and convert it from using a numpy ndarray to using our own data structure.
+While doing that change tha action to modifying the data in place. 
+
+**Note:** Mutable objects (like lists, dictionaries, and arrays) can be changed inside a function, while immutable objects (like numbers and strings) cannot. Think of it like "Small objects like numbers or strings can be copied, but putatively large ones like matrices or dictionaries should not be copied". 
+
 
 In the next section, we will apply these ideas to real expression data: selecting variable genes and scaling (z-scores).
