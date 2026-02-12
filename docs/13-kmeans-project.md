@@ -203,9 +203,22 @@ We need to repeatetly get the eucledian distances of one centroid against all ge
 Implement a ``dist_to_centroid (centroid, mat )`` function.
 
 
-??? example "Again only peak after you finished yours"
+??? example "Peak only after you finished yours"
     
     ```python
+    ## I am sure yours performs way better!
+    def dist( vec_a, vec_b ):
+        """
+        Calculates the distance between two numpy arrays
+        """
+        if len(vec_a) != len(vec_b):
+            raise ValueError("Vectors must have the same length.")
+
+        sum = 0.0
+        for (a,b) in vec_a.zip(vec_b):
+            sum += (a -b) ** 2
+        return (sum ** 0.5)
+
     def dist_to_centroid (centroid, mat ):
         """
         Calculates eucledian distance between one centroid and a matrix of genes
