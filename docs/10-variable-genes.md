@@ -15,7 +15,131 @@ This is a common preprocessing step before clustering and heatmaps.
 
 ---
 
+# Improved start-up
+
+So far we have written many small helper functions directly inside our notebooks.
+That works for experiments, but it quickly becomes messy:
+
+* You need to copy-paste functions between notebooks
+* It is hard to reuse code
+* Mistakes fixed in one notebook do not automatically get fixed in others
+
+A better approach is to store your functions in a **separate Python file** and import them when needed.
+
+---
+
+## Step 1: Create a functions file
+
+In the Jupyter interface:
+
+1. Look at the **file browser panel** on the left.
+2. Click the blue **“+”** button.
+3. Choose:
+
+   * **Other**
+   * **Python File**
+4. Name the file:
+
+```
+functions.py
+```
+
+---
+
+## Step 2: Collect your functions
+
+Open `functions.py` and move all the following into it:
+
+* All `import` statements
+* All helper functions you created in previous sections
+
+For example:
+
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+def dist(vec1, vec2):
+    """
+    Euclidean distance between two vectors
+    """
+    diff = vec1 - vec2
+    return np.sum(diff**2) ** 0.5
+
+
+def get_top_variable_genes(data, top_n=500):
+    """
+    Return top N most variable genes
+    """
+    var = data.var(axis=1)
+    top = var.sort_values(ascending=False).head(top_n)
+    return data.loc[top.index]
+```
+
+You can keep adding functions to this file as the course continues.
+
+---
+
+## Step 3: Import the functions into your notebook
+
+At the top of your notebook, simply write:
+
+```python
+from functions import *
+```
+
+This will:
+
+* Load all libraries defined in `functions.py`
+* Load all functions you defined there
+* Make them available in your notebook
+
+---
+
+## Important note (very useful in Jupyter)
+
+If you change `functions.py`, Jupyter **does not automatically reload it**.
+
+To reload it, run:
+
+```python
+import importlib
+import functions
+importlib.reload(functions)
+from functions import *
+```
+
+Or simply restart the kernel.
+
+---
+
+## Why this is good practice
+
+This approach:
+
+* Keeps notebooks clean
+* Encourages code reuse
+* Makes debugging easier
+* Is closer to how real projects are structured
+
+Later, this idea naturally grows into:
+
+* Python modules
+* Packages
+* Reusable analysis libraries
+
+
+
+---
+
 # Import libraries
+
+These are the libraries we use in the here described functions.
+When you put new function into ``function.py`` make sure that 
+all necessary libraries are also loaded in the file.
+
 
 ```python
 import numpy as np
@@ -139,7 +263,7 @@ print(hspc_zs.std(axis=1, ddof=1).head())
 
 # Visual check: boxplots before and after scaling
 
-There is a boxplot function in pandas, but our dict strores the data as numpy array.
+There is a boxplot function in pandas, but our dict stores the data as numpy array.
 The easiest here is to define one more function that actually converts out dict to a pandas DatFrame - the reverse of our from_df function earlier:
 
 ```python
@@ -151,7 +275,7 @@ def expression_df(data):
     )
 ```
 
-Before:
+Before z-scoring:
 
 ```python
 expression_df(hspc_var).T.boxplot(rot=90)
@@ -172,7 +296,10 @@ plt.show()
 # Exercise
 
 We used ``expression_df(hspc_var).T`` there, but we likely also need a transform for our own data.
-Implement a ``def transform()`` that returns a transformed data structure. 
+
+ 1. Implement a ``def transpose()`` that returns a transformed data structure. 
+ 2. Change the ``zscore_rows()`` function to accept our dict. 
+    Also change the function to zscore in place. We could store the mean and std per gene in the data dist, too.
 
 ---
 

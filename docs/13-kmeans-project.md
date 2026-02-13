@@ -26,6 +26,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.cluster import KMeans
+import math 
+
 ```
 
 **And our own functions:**
@@ -89,7 +92,6 @@ Algorithm idea:
 This gives a correct implementation you can trust.
 
 ```python
-from sklearn.cluster import KMeans
 
 K = 8
 km = KMeans(n_clusters=K, n_init=10, random_state=0)
@@ -115,7 +117,6 @@ Approach:
 - optionally plot the average centroid (thicker line)
 
 ```python
-import math 
 
 def plot_cluster_patterns(data, cluster_col, K=None, ncols=4, show_centroid=True):
     """
@@ -222,7 +223,7 @@ Implement a ``dist_to_centroid (centroid, mat )`` function.
     def dist_to_centroid (centroid, mat ):
         """
         Calculates eucledian distance between one centroid and a matrix of genes
-        """"
+        """
         dists = []
         for i in range(mat.shape[0]):
             dists.append( dist( centroid, mat[i] ) )

@@ -16,124 +16,7 @@ We will use the scaled variable-gene matrix from the previous section:
 - `hspc_zs` (z-scored per gene)
 
 
-# Improved start-up
 
-So far we have written many small helper functions directly inside our notebooks.
-That works for experiments, but it quickly becomes messy:
-
-* You need to copy-paste functions between notebooks
-* It is hard to reuse code
-* Mistakes in one notebook do not automatically get fixed in others
-
-A better approach is to store your functions in a **separate Python file** and import them when needed.
-
----
-
-## Step 1: Create a functions file
-
-In the Jupyter interface:
-
-1. Look at the **file browser panel** on the left.
-2. Click the blue **“+”** button.
-3. Choose:
-
-   * **Other**
-   * **Python File**
-4. Name the file:
-
-```
-functions.py
-```
-
----
-
-## Step 2: Collect your functions
-
-Open `functions.py` and move all the following into it:
-
-* All `import` statements
-* All helper functions you created in previous sections
-
-For example:
-
-```python
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
-
-def dist(vec1, vec2):
-    """
-    Euclidean distance between two vectors
-    """
-    diff = vec1 - vec2
-    return np.sum(diff**2) ** 0.5
-
-
-def get_top_variable_genes(data, top_n=500):
-    """
-    Return top N most variable genes
-    """
-    var = data.var(axis=1)
-    top = var.sort_values(ascending=False).head(top_n)
-    return data.loc[top.index]
-```
-
-You can keep adding functions to this file as the course continues.
-
----
-
-## Step 3: Import the functions into your notebook
-
-At the top of your notebook, simply write:
-
-```python
-from functions import *
-```
-
-This will:
-
-* Load all libraries defined in `functions.py`
-* Load all functions you defined there
-* Make them available in your notebook
-
----
-
-## Important note (very useful in Jupyter)
-
-If you change `functions.py`, Jupyter **does not automatically reload it**.
-
-To reload it, run:
-
-```python
-import importlib
-import functions
-importlib.reload(functions)
-from functions import *
-```
-
-Or simply restart the kernel.
-
----
-
-## Why this is good practice
-
-This approach:
-
-* Keeps notebooks clean
-* Encourages code reuse
-* Makes debugging easier
-* Is closer to how real projects are structured
-
-Later, this idea naturally grows into:
-
-* Python modules
-* Packages
-* Reusable analysis libraries
-
-
-
----
 
 # Import libraries
 
@@ -147,6 +30,16 @@ import seaborn as sns
 import scipy.cluster.hierarchy as sch
 ```
 
+(Re)load our functions:
+
+```python
+import importlib
+import functions
+importlib.reload(functions)
+from functions import *
+```
+
+``
 # Get the Data
 
 ```python
@@ -158,7 +51,6 @@ hspc_data = pd.read_csv(
     index_col=0
 )
 hspc_data = from_pd(hspc_data )
-
 
 hspc_var = get_top_variable_genes(hspc_data, top_n=500)
 hspc_zs = hspc_var.copy()
@@ -174,14 +66,14 @@ zscore_rows(hspc_zs)
 Hierarchical clustering groups similar genes together.
 
 We need a distance between rows (genes). A common choice is Euclidean distance.
-Then we build a hierarchy using a linkage method.
-Ward is a linkage method that starts with each gene as its own cluster.
+Then we build a hierarchy using the linkage method "Ward".
 
+Ward is a linkage method that starts with each gene as its own cluster.
 At every step, it looks at all pairs of clusters, computes the distance between their centers using Euclidean distance, and asks: if we merge these two clusters, how much would the total variance inside the cluster increase?
 It then merges the pair that produces the smallest increase in within-cluster variance, which leads to compact, tight clusters. 
 
 ```python
-gene_dist = vectorized_dist(hspc_zs, metric="euclidean")
+gene_dist = vectorized_dist(hspc_zs)
 gene_link = sch.linkage(gene_dist, method="ward")
 ```
 
@@ -189,7 +81,7 @@ Plot a dendrogram (for small numbers of genes this is fine):
 
 ```python
 plt.figure(figsize=(10, 6))
-sch.dendrogram(gene_link, labels=hspc_zs.index.tolist(), leaf_rotation=90)
+sch.dendrogram(gene_link, labels=hspc_zs["genes"].index.tolist(), leaf_rotation=90)
 plt.title("Hierarchical clustering (genes)")
 plt.xlabel("Gene")
 plt.ylabel("Distance")
@@ -206,13 +98,13 @@ Note: With hundreds of genes, dendrogram labels can become unreadable. That’s 
 To cluster samples, transpose the matrix so samples become rows:
 
 ```python
-sample_dist = vectorized_dist(hspc_zs.transformed() )
+sample_dist = vectorized_dist(transpose(hspc_zs) )
 sample_link = sch.linkage(sample_dist, method="ward")
 ```
 
 ```python
 plt.figure(figsize=(10, 6))
-sch.dendrogram(sample_link, labels=hspc_zs.['samples'].tolist(), leaf_rotation=90)
+sch.dendrogram(sample_link, labels=hspc_zs['samples'].index.tolist(), leaf_rotation=90)
 plt.title("Hierarchical clustering (samples)")
 plt.xlabel("Sample")
 plt.ylabel("Distance")
@@ -226,7 +118,7 @@ plt.show()
 
 ```python
 plt.figure(figsize=(8, 6))
-plt.imshow(hspc_zs.values, aspect="auto")
+plt.imshow(hspc_zs['expression'], aspect="auto")
 plt.title("Heatmap (no clustering)")
 plt.xlabel("Samples")
 plt.ylabel("Genes")
@@ -242,8 +134,8 @@ This shows the data but doesn’t order genes/samples by similarity.
 We can extract the ordering from the dendrogram output and reorder the matrix.
 
 ```python
-genes_hc = sch.dendrogram(gene_link, no_plot=True, labels=hspc_zs.index.tolist())
-samples_hc = sch.dendrogram(sample_link, no_plot=True, labels=hspc_zs.columns.tolist())
+genes_hc = sch.dendrogram(gene_link, no_plot=True, labels=hspc_zs['genes'].index.tolist())
+samples_hc = sch.dendrogram(sample_link, no_plot=True, labels=hspc_zs['samples'].index.tolist())
 
 ordered = expression_df(hspc_zs).loc[genes_hc["ivl"], samples_hc["ivl"]]
 ordered.shape
@@ -283,7 +175,7 @@ We use `z_score=0` to z-score rows (genes) inside clustermap.
 
 ```python
 cm = sns.clustermap(
-    hspc_var,
+    hspc_var['expression'],
     method="ward",
     metric="euclidean",
     cmap="magma",

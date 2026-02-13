@@ -233,12 +233,12 @@ do_anova(hspc_data.iloc[0, :].values, groups.values)
 
 ---
 
-# Apply to all genes (many tests)
+# Run for all genes (many tests)
 
 For each gene (row), we compute one p-value.
 
 This is not as easily vectorized as mean/variance because model fitting is complex.
-So a row-wise loop (or `apply`) is acceptable here.
+So a row-wise loop is acceptable here.
 
 ```python
 data= expression_df(hspc_data)
@@ -329,4 +329,4 @@ Differential expression and many “gene tests” follow this idea:
 
 You now have the core workflow.
 
-Next section (optional) can cover an algorithmic topic (e.g., k-means + a final project).
+Next section marks the end of this tutorial and we will dig into k-means and a final project.

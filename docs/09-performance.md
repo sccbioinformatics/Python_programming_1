@@ -21,6 +21,7 @@ Writing code that *runs* is not enough — it must also run *fast enough*.
 ```python
 import numpy as np
 import pandas as pd
+import math
 
 url = "https://raw.githubusercontent.com/shambam/R_programming_1/main/Mouse_HSPC_reduced.txt"
 hspc_data = pd.read_csv(
@@ -120,7 +121,7 @@ def subset_genes(data, gene_idx):
     return {"expression": X2, "genes": genes2, "samples": samples2}
 hspc_data_tiny = subset_genes(  hspc_data , np.arange(200) )
 check_data_model( hspc_data_tiny )
-hspc_data_tiny.shape
+hspc_data_tiny['expression'].shape
 ```
 
 ```python
@@ -161,15 +162,15 @@ from scipy.spatial.distance import pdist, squareform
 
 def vectorized_dist(data):
     """
-    data: a dist with "expression" - a numpy array (rows = features, cols = observations)
+    data: a numpy array (rows = features, cols = observations)
     returns: full (nrow x nrow) Euclidean distance matrix as numpy array
     """
     # upper triangle (condensed form)
-    upper = pdist(data['expression'], metric="euclidean")
+    upper = pdist(data, metric="euclidean")
 
     # convert to full symmetric matrix
     D = squareform(upper)
-
+    
     return D
 ```
 
@@ -177,6 +178,7 @@ I am sure by now you can check the run time without my help.
 
 Would it be feasable to process all 4170 rows with this fastest function?
 
+---
 
 ## The key lesson
 
@@ -204,8 +206,10 @@ Why? Because even a for loop calls Python code repeatedly whereas the vectorized
 
 # Exercise
 
-Take the function ``zscore_rows`` and convert it from using a numpy ndarray to using our own data structure.
-While doing that change tha action to modifying the data in place. 
+Take the function ``vectorized_dist`` and convert it from using a numpy ndarray to using our own data structure.
+While doing that we should think about storing this data in our object.
+Currently this neighbor graph is nothing that we need repetetly, but it is rather costly to create.
+Instead of only returning the neighbor graph, store it in the dict, too.
 
 **Note:** Mutable objects (like lists, dictionaries, and arrays) can be changed inside a function, while immutable objects (like numbers and strings) cannot. Think of it like "Small objects like numbers or strings can be copied, but putatively large ones like matrices or dictionaries should not be copied". 
 

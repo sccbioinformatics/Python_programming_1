@@ -56,7 +56,7 @@ def get_gene(data, gene):
     """
 
     g_idx = data["genes"].index.get_loc(gene)
-    return data["expression"][:, g_idx]
+    return data["expression"][g_idx]
 ```
 
 Try it:
