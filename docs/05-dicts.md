@@ -147,6 +147,23 @@ Combine dictionary access and DataFrame indexing:
 data["expression"].loc["Gata1", :]
 ```
 
+But this does not work like that - does it?
+
+Remember what ``data["expression"]`` is - a ndarray that is very efficient for calculations.
+But it lacks row and column names. We have stored row and column data in ``genes`` and ``samples``. Actually the gene names are stored in the rownames of the genes object.
+
+```python
+print (data['genes'].index)
+data['genes'].index == "Gata1"
+```
+
+Do you remember how to subset a ndarray using a boolean array? Try it!
+
+??? exercise "Solution:"
+    ```python
+    data['expression'][ data['genes'].index == "Gata1" ]
+    ```
+
 ---
 
 # Modifying a dictionary
